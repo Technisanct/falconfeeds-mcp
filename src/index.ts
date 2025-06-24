@@ -1,0 +1,87 @@
+#!/usr/bin/env node
+
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
+import { FalconFeedsApiClient } from "./services/api-client.js";
+import { CVEService } from "./services/cve/cve-service.js";
+import { ThreatFeedService } from "./services/threat-feed/threat-feed-service.js";
+import { ThreatActorService } from "./services/threat-actor/threat-actor-service.js";
+import { ThreatImageService } from "./services/threat-image/threat-image-service.js";
+import { getServerConfig } from "./config/server-config.js";
+
+import { registerCVETools } from "./tools/cve/cve-tools.js";
+import { registerThreatFeedTools } from "./tools/threat-feed/threat-feed-tools.js";
+import { registerThreatActorTools } from "./tools/threat-actor/threat-actor-tools.js";
+import { registerThreatImageTools } from "./tools/threat-image/threat-image-tools.js";
+
+import { registerCybersecurityPrompts } from "./prompts/prompt-registry.js";
+
+class FalconFeedsMCPServer {
+  private server: McpServer;
+  private config = getServerConfig();
+  private apiClient!: FalconFeedsApiClient;
+  private cveService!: CVEService;
+  private threatFeedService!: ThreatFeedService;
+  private threatActorService!: ThreatActorService;
+  private threatImageService!: ThreatImageService;
+
+  constructor() {
+    this.server = new McpServer({
+      name: "falconfeeds-mcp-server",
+      version: "1.0.0"
+    });
+
+    this.initializeServices();
+    this.registerAllTools();
+    this.registerAllPrompts();
+  }
+
+  private initializeServices(): void {
+    const apiKey = process.env.FALCONFEEDS_API_KEY;
+    
+    if (!apiKey) {
+      throw new Error("FALCONFEEDS_API_KEY environment variable is required");
+    }
+
+    this.apiClient = new FalconFeedsApiClient({
+      apiKey,
+      timeout: this.config.api.defaultTimeout
+    });
+
+    this.cveService = new CVEService(this.apiClient);
+    this.threatFeedService = new ThreatFeedService(this.apiClient);
+    this.threatActorService = new ThreatActorService(this.apiClient);
+    this.threatImageService = new ThreatImageService(this.apiClient);
+  }
+
+  private registerAllTools(): void {
+    registerCVETools(this.server, this.cveService);
+    registerThreatFeedTools(this.server, this.threatFeedService, this.threatActorService);
+    registerThreatActorTools(this.server, this.threatActorService);
+    registerThreatImageTools(this.server, this.threatImageService);
+  }
+
+  private registerAllPrompts(): void {
+    registerCybersecurityPrompts(this.server);
+  }
+
+  async start(): Promise<void> {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+  }
+}
+
+async function main(): Promise<void> {
+  try {
+    const server = new FalconFeedsMCPServer();
+    await server.start();
+  } catch (error) {
+    console.error("Failed to start FalconFeeds MCP Server:", error);
+    process.exit(1);
+  }
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(console.error);
+} 
