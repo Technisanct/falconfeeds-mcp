@@ -5,4 +5,7 @@ export * from './cve.js';
 export * from './threat-feed.js';
 
 // Threat Actor types
-export * from './threat-actor.js'; 
+export * from './threat-actor.js';
+
+// IOC types
+export * from './ioc.js'; 
