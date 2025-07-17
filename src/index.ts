@@ -29,7 +29,7 @@ class FalconFeedsMCPServer {
   constructor() {
     this.server = new McpServer({
       name: "falconfeeds-mcp-server",
-      version: "1.0.3"
+      version: "1.0.4"
     });
 
     this.initializeServices();
@@ -82,6 +82,5 @@ async function main(): Promise<void> {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(console.error);
-} 
+// Always run main when this file is executed
+main().catch(console.error); 
