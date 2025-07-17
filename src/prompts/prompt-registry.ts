@@ -14,12 +14,12 @@ export interface PromptConfig {
 
 export const CYBERSECURITY_PROMPTS: PromptConfig[] = [
   {
-    name: "Threat Intelligence Report",
-    description: "Generate a comprehensive threat intelligence report for a specific threat actor or campaign",
+    name: "Cyber Security Threat Intelligence Report",
+    description: "Generate a comprehensive threat intelligence report for a threat actor, country, industry, or organization",
     arguments: [
       {
-        name: "Threat Actor",
-        description: "Name of the threat actor or group",
+        name: "Target",
+        description: "Name of the threat actor, country, industry, or organization to analyze",
         required: true
       },
       {
@@ -28,7 +28,7 @@ export const CYBERSECURITY_PROMPTS: PromptConfig[] = [
         required: false
       }
     ],
-    template: `Generate a comprehensive threat intelligence report for {{Threat Actor}}{{#Time Period}} covering {{Time Period}}{{/Time Period}}.
+    template: `Generate a comprehensive threat intelligence report for {{Target}}{{#Time Period}} covering {{Time Period}}{{/Time Period}}.
       Include the following sections:
       1. Executive Summary
       2. Actor Profile and Attribution
@@ -70,242 +70,164 @@ export const CYBERSECURITY_PROMPTS: PromptConfig[] = [
     Use FalconFeeds data to identify any active exploitation or threat actor interest in this vulnerability.`
   },
   {
-    name: "Incident Threat Correlation",
-    description: "Correlate security incidents with known threat actors and campaigns",
+    name: "Ransomware Analysis",
+    description: "Analyze Ransomware activity and patterns",
     arguments: [
       {
-        name: "Indicators",
-        description: "Comma-separated list of IOCs (IPs, domains, hashes, etc.)",
+        name: "Ransomware Name",
+        description: "Name of the ransomware to analyze (e.g., 'Ransomware', 'Data Breach', 'Malware', 'Phishing')",
         required: true
       },
       {
-        name: "Incident Type",
-        description: "Type of security incident (e.g., 'ransomware', 'data breach', 'malware')",
-        required: true
-      }
-    ],
-    template: `Analyze and correlate the following indicators with known threat actors and campaigns:
-      Indicators: {{Indicators}}
-      Incident Type: {{Incident Type}}
-
-      Provide analysis on:
-      1. Threat Actor Attribution (high/medium/low confidence)
-      2. Campaign Association and Timeline
-      3. Similar Historical Incidents
-      4. TTPs and Infrastructure Overlap
-      5. Victimology Patterns
-      6. Recommended Investigation Steps
-      7. Additional IOCs to Hunt For
-      8. Defensive Countermeasures
-    Cross-reference with FalconFeeds threat intelligence to identify matching patterns and actor behaviors.`
-  },
-  {
-    name: "Vulnerability Trend Analysis",
-    description: "Analyze vulnerability trends and emerging threats in specific technology stacks",
-    arguments: [
-      {
-        name: "Technology Stack",
-        description: "Technology or vendor to analyze (e.g., 'Microsoft', 'Apache', 'VMware')",
-        required: true
-      },
-      {
-        name: "Time Range (Days)",
-        description: "Number of days to look back (default: 90)",
+        name: "Time Frame",
+        description: "Analysis time frame (e.g., 'last 30 days', 'Q1 2024')",
         required: false
       }
     ],
-    template: `Analyze vulnerability trends for {{Technology Stack}} over the past {{Time Range (Days)}}{{^Time Range (Days)}}90{{/Time Range (Days)}} days.
-    Generate insights on:
-    1. Vulnerability Volume and Severity Trends
-    2. Most Critical CVEs and Exploitation Risk
-    3. Common Vulnerability Types and Root Causes
-    4. Patch Management Challenges
-    5. Active Threat Actor Interest
-    6. Zero-Day and N-Day Exploitation Patterns
-    7. Defensive Recommendations
-    8. Priority Patching Strategy
-  Use FalconFeeds CVE data to identify patterns and correlate with threat actor activity.`
-  },
-  {
-    name: "Threat Hunting Playbook",
-    description: "Create threat hunting procedures for specific threat categories",
-    arguments: [
-      {
-        name: "Threat Category",
-        description: "Category of threat to hunt for (e.g., 'Ransomware', 'APT', 'Insider Threat')",
-        required: true
-      },
-      {
-        name: "Environment Type",
-        description: "IT environment type (e.g., 'Windows AD', 'Cloud', 'OT/ICS')",
-        required: false
-      }
-    ],
-    template: `Develop a comprehensive threat hunting playbook for {{Threat Category}}{{#Environment Type}} in {{Environment Type}} environments{{/Environment Type}}.
+    template: `Analyze threat activity patterns for {{Ransomware Name}}{{#Time Frame}} over {{Time Frame}}{{/Time Frame}}.
     Include:
-    1. Threat Overview and Context
-    2. Common Attack Vectors and TTPs
-    3. Key Indicators and Behavioral Patterns
-    4. Hunting Hypotheses and Objectives
-    5. Data Sources and Collection Requirements
-    6. Hunting Queries and Detection Logic
-    7. Analysis Techniques and Tools
-    8. Response and Escalation Procedures
-    9. Lessons Learned and Playbook Updates
-  Incorporate recent FalconFeeds intelligence on {{Threat Category}} activities and actor behaviors.`
+    1. Ransomware Overview and Current Landscape
+    2. Most Active Threat Actors in this Category
+    3. Common Attack Vectors and Methods
+    4. Target Industry and Geographic Analysis
+    5. Recent Campaign Highlights
+    6. Victim Impact Assessment
+    7. Detection and Prevention Strategies
+    8. Threat Intelligence Recommendations
+  Use FalconFeeds threat feed data filtered by {{Threat Category}} category to provide current intelligence.`
   },
   {
-    name: "Supply Chain Threat Analysis",
-    description: "Analyze supply chain threats and vendor risk assessments",
+    name: "Industry-Specific Threat Assessment",
+    description: "Generate industry-specific threat briefings for industry verticals",
     arguments: [
       {
-        name: "Vendor Name",
-        description: "Vendor or software supplier name",
-        required: true
-      },
-      {
-        name: "Assessment Scope",
-        description: "Scope of assessment (e.g., 'software products', 'infrastructure', 'services')",
-        required: false
-      }
-    ],
-    template: `Conduct a supply chain threat analysis for {{Vendor Name}}{{#Assessment Scope}} focusing on {{Assessment Scope}}{{/Assessment Scope}}.
-
-Evaluate:
-1. Vendor Security Posture and History
-2. Known Vulnerabilities and Exposures
-3. Threat Actor Targeting and Interest
-4. Supply Chain Attack Vectors
-5. Third-Party Risk Dependencies
-6. Security Incident History
-7. Compliance and Certification Status
-8. Risk Mitigation Recommendations
-9. Monitoring and Assessment Strategy
-
-Leverage FalconFeeds data to identify any targeting of the vendor or related supply chain incidents.`
-  },
-  {
-    name: "IOC Enrichment Analysis",
-    description: "Enrich and analyze indicators of compromise for threat intelligence",
-    arguments: [
-      {
-        name: "IOC Value",
-        description: "Indicator value (IP, domain, hash, email, etc.)",
-        required: true
-      },
-      {
-        name: "IOC Type",
-        description: "Type of indicator (ip, domain, hash, email, etc.)",
-        required: true
-      }
-    ],
-    template: `Perform comprehensive enrichment analysis for the indicator: {{IOC Value}} ({{IOC Type}})
-
-Provide detailed analysis including:
-1. Indicator Classification and Confidence Level
-2. Threat Actor Attribution and Campaigns
-3. Malware Family and Variant Analysis
-4. Infrastructure Relationships and Pivots
-5. Temporal Analysis and Activity Timeline
-6. Victimology and Targeting Patterns
-7. Detection Coverage and Gaps
-8. Recommended Actions and IOCs to Monitor
-
-Cross-reference with FalconFeeds threat intelligence to identify related activities and context.`
-  },
-  {
-    name: "Sector Threat Briefing",
-    description: "Generate sector-specific threat briefings for industry verticals",
-    arguments: [
-      {
-        name: "Industry Sector",
-        description: "Industry sector (e.g., 'healthcare', 'financial', 'government', 'energy')",
+        name: "Industry",
+        description: "Industry sector (e.g., 'Healthcare', 'Financial Services', 'Government', 'Energy')",
         required: true
       },
       {
         name: "Geographic Region",
-        description: "Geographic focus (e.g., 'North America', 'EMEA', 'APAC')",
+        description: "Geographic focus (e.g., 'United States', 'United Kingdom', 'Germany')",
         required: false
       }
     ],
-    template: `Generate a comprehensive threat briefing for the {{Industry Sector}} sector{{#Geographic Region}} in {{Geographic Region}}{{/Geographic Region}}.
+    template: `Generate a comprehensive threat briefing for the {{Industry}} sector{{#Geographic Region}} in {{Geographic Region}}{{/Geographic Region}}.
 
 Cover:
 1. Current Threat Landscape Overview
 2. Sector-Specific Targeting Trends
 3. Major Threat Actors and Their Motivations
-4. Common Attack Vectors and TTPs
+4. Common Attack Categories and Methods
 5. Recent High-Impact Incidents
-6. Regulatory and Compliance Implications
-7. Industry-Specific Vulnerabilities
+6. Industry-Specific Vulnerabilities
+7. Regional Threat Patterns
 8. Defensive Best Practices
 9. Threat Intelligence Recommendations
 
-Utilize FalconFeeds data to provide current intelligence on threats targeting this sector.`
+Utilize FalconFeeds threat feed data filtered by industry and geographic targeting to provide current intelligence.`
   },
   {
-    name: "Malware Family Analysis",
-    description: "Analyze malware families and their evolution patterns",
+    name: "Threat Actor Comparison",
+    description: "Perform detailed cyber threat intelligence analysis comparing multiple threat actors' TTPs, infrastructure, and operational patterns to identify overlaps and distinctions in their methodologies",
     arguments: [
-      {
-        name: "Malware Family",
-        description: "Malware family name (e.g., 'Emotet', 'Ryuk', 'Cobalt Strike')",
-        required: true
-      },
-      {
-        name: "Analysis Depth",
-        description: "Depth of analysis (basic, detailed, comprehensive)",
-        required: false
-      }
-    ],
-    template: `Conduct {{Analysis Depth}}{{^Analysis Depth}}detailed{{/Analysis Depth}} analysis of the {{Malware Family}} malware family.
-
-Research and analyze:
-1. Malware Family Overview and History
-2. Technical Capabilities and Features
-3. Infection and Propagation Methods
-4. Command and Control Infrastructure
-5. Payload and Post-Exploitation Activities
-6. Evasion and Persistence Techniques
-7. Attribution and Actor Usage Patterns
-8. Variant Evolution and Updates
-9. Detection and Mitigation Strategies
-10. Related Families and Tool Overlap
-
-Use FalconFeeds intelligence to identify recent campaigns and actor usage of this malware family.`
-  },
-  {
-    name: "Geopolitical Threat Assessment",
-    description: "Assess cyber threats in the context of geopolitical events and tensions",
-    arguments: [
-      {
-        name: "Geopolitical Event",
-        description: "Specific geopolitical event or tension area",
-        required: true
-      },
       {
         name: "Threat Actors",
-        description: "Comma-separated list of relevant threat actors or nation-states",
+        description: "Comma-separated list of threat actor names to compare",
+        required: true
+      },
+      {
+        name: "Analysis Focus",
+        description: "Specific aspect to focus on (e.g., 'TTPs', 'targeting', 'infrastructure')",
         required: false
       }
     ],
-    template: `Analyze cyber threat implications of: {{Geopolitical Event}}
+    template: `Conduct a comparative analysis of the following threat actors: {{Threat Actors}}{{#Analysis Focus}} with focus on {{Analysis Focus}}{{/Analysis Focus}}.
 
-Assess:
-1. Geopolitical Context and Stakeholders
-2. Cyber Threat Actor Motivations and Capabilities
-3. Historical Precedents and Patterns
-4. Likely Targets and Attack Scenarios
-5. Threat Actor Collaboration and Proxy Activities
-6. Information Operations and Influence Campaigns
-7. Critical Infrastructure Risks
-8. Economic and Supply Chain Implications
-9. Defensive Posture Recommendations
-10. Monitoring and Intelligence Requirements
+Analyze and compare:
+1. Actor Profiles and Attribution
+2. Operational Capabilities and Sophistication
+3. Targeting Preferences and Victim Selection
+4. Attack Methods and Techniques
+5. Infrastructure and Tools Usage
+6. Activity Timelines and Patterns
+7. Potential Relationships or Collaborations
+8. Threat Level Assessment
+9. Detection and Mitigation Strategies
 
-{{#Threat Actors}}Focus analysis on: {{Threat Actors}}{{/Threat Actors}}
+Use get_threat_actor_profile for each actor to gather comprehensive intelligence and compare their attributed activities from FalconFeeds.`
+  },
+  {
+    name: "Geopolitical Threat Landscape Assessment",
+    description: "Conduct comprehensive country-specific cyber threat landscape analysis for strategic threat intelligence and national security assessment",
+    arguments: [
+      {
+        name: "Country",
+        description: "Target country for threat landscape analysis (e.g., 'United States', 'Germany', 'Japan')",
+        required: true
+      },
+      {
+        name: "Assessment Period",
+        description: "Temporal scope for analysis (e.g., 'Q4 2024', 'last 6 months', 'YTD 2024')",
+        required: false
+      },
+      {
+        name: "Focus Area",
+        description: "Specific focus area for deeper analysis (e.g., 'critical infrastructure', 'financial sector', 'government entities')",
+        required: false
+      }
+    ],
+    template: `Conduct a comprehensive geopolitical cyber threat landscape assessment for {{Country}}{{#Assessment Period}} covering {{Assessment Period}}{{/Assessment Period}}{{#Focus Area}} with emphasis on {{Focus Area}}{{/Focus Area}}.
 
-Correlate with current FalconFeeds intelligence on relevant threat actor activities and geopolitical cyber operations.`
+METHODOLOGY: Utilize FalconFeeds country-specific threat intelligence to provide evidence-based analysis. Cross-reference threat actor activities, attack patterns, and victim targeting data.
+
+EXECUTIVE SUMMARY:
+Provide a concise overview of the current threat landscape and key findings.
+
+DETAILED ANALYSIS SECTIONS:
+
+1. **Threat Actor Ecosystem**
+   - State-sponsored Advanced Persistent Threats (APTs) targeting {{Country}}
+   - Cybercriminal organizations operating against {{Country}} entities
+   - Hacktivist groups and their motivations
+   - Attribution confidence levels and intelligence gaps
+
+2. **Attack Vector Analysis**
+   - Primary attack methodologies observed
+   - Sector-specific targeting patterns
+   - Infrastructure compromise trends
+   - Supply chain attack incidents
+
+3. **Critical Infrastructure Threat Assessment**
+   - Energy sector targeting and vulnerabilities
+   - Financial services threat exposure
+   - Healthcare and government entity risks
+   - Telecommunications and technology sector threats
+
+4. **Victim Impact Metrics**
+   - Quantitative analysis of confirmed breaches
+   - Economic impact assessment where available
+   - Data exfiltration patterns and types
+   - Service disruption incidents
+
+5. **Threat Intelligence Gaps**
+   - Areas requiring enhanced collection
+   - Attribution challenges and uncertainties
+   - Emerging threat vectors requiring monitoring
+
+6. **Strategic Recommendations**
+   - National cybersecurity posture improvements
+   - Sector-specific defensive priorities
+   - International cooperation opportunities
+   - Threat hunting focus areas
+
+7. **Indicators and Warning Signs**
+   - Key indicators of compromise (IOCs)
+   - Behavioral patterns for detection
+   - Early warning signals for emerging threats
+
+INTELLIGENCE SOURCES: Leverage get_threat_feeds_by_country tool for {{Country}}-specific threat intelligence. Supplement with threat actor profiling and cross-border attack pattern analysis from FalconFeeds database.
+
+CLASSIFICATION: Provide appropriate handling and distribution guidance for the intelligence contained within this assessment.`
   }
 ];
 
