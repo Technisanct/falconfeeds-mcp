@@ -1,6 +1,6 @@
 {
   "name": "falconfeeds-mcp",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "FalconFeeds MCP Server for threat intelligence and cybersecurity data",
   "type": "module",
   "main": "dist/index.js",

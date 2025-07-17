@@ -201,8 +201,6 @@ export class FalconFeedsApiClient implements IApiClient {
         );
       }
     }
-    
-    // For Organization and Site victim keys, we allow any string value
   }
 
 
@@ -215,15 +213,6 @@ export class FalconFeedsApiClient implements IApiClient {
         "page must be at least 1",
         400,
         "invalid_parameter"
-      );
-    }
-
-    // Validate country if provided
-    if (params.country && !isValidCountry(params.country)) {
-      throw new FalconFeedsApiError(
-        `Invalid country name: "${params.country}". Must be one of the supported countries.`,
-        400,
-        "invalid_country"
       );
     }
   }
