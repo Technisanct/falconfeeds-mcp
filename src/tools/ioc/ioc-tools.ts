@@ -11,9 +11,9 @@ export function registerIOCTools(
   server.registerTool(
     "search_iocs",
     {
-      description: "**PREFERRED for general IOC searches**: Search Indicators of Compromise (IOCs) with optional filters. This tool provides access to IOCs from multiple threat intelligence sources including ThreatFox, AlienVault, and others. Note: This API may have higher response times (~4 seconds) as it aggregates data from multiple sources.",
+      description: "**PREFERRED for general IOC searches**: Search Indicators of Compromise (IOCs) with optional filters. This API may have higher response times (~4 seconds) as it aggregates data from multiple sources.",
       inputSchema: {
-        country: z.string().optional().describe("Optional filter by country name. Use FULL country names, not abbreviations (e.g., 'China', 'United States', 'Russia', 'United Kingdom', not 'CN', 'US', 'RU', 'UK')"),
+        country: z.string().optional().describe("Country name for filtering IOCs. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),
         page: z.number().optional().describe("Optional page number for pagination (starts from 1)"),
         threatType: z.enum(["botnet_cc", "malware_download", "Malware", "Clean", "general", "Suspicious", "payload"]).optional().describe("Optional filter by threat type")
       }
@@ -58,7 +58,7 @@ export function registerIOCTools(
     {
       description: "**PREFERRED for country-specific IOC analysis**: Get IOCs filtered by a specific country. This tool is optimized for analyzing threats targeting or originating from particular countries. Use FULL country names, not abbreviations.",
       inputSchema: {
-        country: z.string().describe("Country name for filtering IOCs. Use FULL country names, not abbreviations (e.g., 'China', 'United States', 'Russia', 'United Kingdom', not 'CN', 'US', 'RU', 'UK')")
+        country: z.string().describe("Country name for filtering IOCs. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**")
       }
     },
     async ({ country }) => {
