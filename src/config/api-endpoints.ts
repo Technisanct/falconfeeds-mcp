@@ -4,7 +4,6 @@ export const API_CONFIG = {
     CVE: "/cve",
     THREAT_FEED: "/threat/feed",
     THREAT_ACTOR: "/threat/actor",
-    THREAT_IMAGE: "/threat/image",
     IOC: "/ioc"
   },
   LIMITS: {
@@ -39,12 +38,7 @@ export const ENDPOINT_REGISTRY: Record<string, EndpointConfig> = {
     description: "Retrieve threat actor information",
     requiresAuth: true
   },
-  GET_THREAT_IMAGE: {
-    path: API_CONFIG.ENDPOINTS.THREAT_IMAGE,
-    method: "GET",
-    description: "Retrieve threat feed images/screenshots",
-    requiresAuth: true
-  },
+
   GET_IOCS: {
     path: API_CONFIG.ENDPOINTS.IOC,
     method: "GET",

@@ -6,8 +6,6 @@ import type {
   ThreatFeedQueryParams,
   ThreatActorResponse,
   ThreatActorQueryParams,
-  ImageResponse,
-  ImageQueryParams,
   IOCResponse,
   IOCQueryParams
 } from "../types/index.js";
@@ -39,7 +37,6 @@ export interface IApiClient {
   getCVEs(params: CVEQueryParams): Promise<CVEResponse>;
   getThreatFeeds(params?: ThreatFeedQueryParams): Promise<ThreatFeedResponse>;
   getThreatActors(params?: ThreatActorQueryParams): Promise<ThreatActorResponse>;
-  getThreatImage(params: ImageQueryParams): Promise<ImageResponse>;
   getIOCs(params?: IOCQueryParams): Promise<IOCResponse>;
 }
 
@@ -138,11 +135,6 @@ export class FalconFeedsApiClient implements IApiClient {
     return this.makeRequest<ThreatActorResponse>(API_CONFIG.ENDPOINTS.THREAT_ACTOR, params);
   }
 
-  async getThreatImage(params: ImageQueryParams): Promise<ImageResponse> {
-    this.validateImageParams(params);
-    return this.makeRequest<ImageResponse>(API_CONFIG.ENDPOINTS.THREAT_IMAGE, params);
-  }
-
   async getIOCs(params?: IOCQueryParams): Promise<IOCResponse> {
     this.validateIOCParams(params);
     return this.makeRequest<IOCResponse>(API_CONFIG.ENDPOINTS.IOC, params);
@@ -213,15 +205,7 @@ export class FalconFeedsApiClient implements IApiClient {
     // For Organization and Site victim keys, we allow any string value
   }
 
-  private validateImageParams(params: ImageQueryParams): void {
-    if (!params.uuid) {
-      throw new FalconFeedsApiError(
-        "uuid is required for image requests",
-        400,
-        "invalid_parameter"
-      );
-    }
-  }
+
 
   private validateIOCParams(params?: IOCQueryParams): void {
     if (!params) return;
