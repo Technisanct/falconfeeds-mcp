@@ -408,6 +408,48 @@ ACTIONABLE INTELLIGENCE OUTPUTS:
 - Attribution confidence levels and intelligence gaps
 
 OPERATIONAL CONSIDERATIONS: Maintain appropriate source protection and ensure compliance with platform terms of service and applicable regulations when utilizing Telegram-derived intelligence.`
+  },
+  {
+    name: "IOC Analysis",
+    description: "Analyze Indicators of Compromise (IOCs) to assess threat levels, identify patterns, and support incident response.",
+    arguments: [
+        {
+            name: "Threat Type",
+            description: "Type of threat to analyze (e.g., 'Malware', 'botnet_cc', 'Suspicious').",
+            required: false,
+        },
+        {
+            name: "Country",
+            description: "Country to analyze for IOCs (e.g., 'United States', 'Germany'). Use full country names.",
+            required: false,
+        },
+        {
+            name: "Indicator",
+            description: "Specific indicator to investigate (e.g., IP address, domain, hash).",
+            required: false,
+        },
+    ],
+    template: `Conduct a comprehensive IOC analysis.
+
+INSTRUCTIONS:
+- Use the 'search_iocs' tool to get relevant IOCs. You can filter by 'Country' and/or 'Threat Type'.
+{{#Country}}
+- For a country-focused analysis, the 'get_iocs_by_country' tool is preferred for {{Country}}.
+{{/Country}}
+{{#Threat Type}}
+- For a threat-type-focused analysis, the 'get_iocs_by_threat_type' tool is preferred for '{{Threat Type}}'.
+{{/Threat Type}}
+
+Based on the retrieved IOCs, provide a detailed report including:
+1.  **IOC Summary**: Summarize the IOCs, noting types (IPs, domains, hashes) and volume.
+2.  **Threat Context**: What kind of threats are these IOCs associated with? (e.g., malware campaigns, botnets).
+3.  **Geopolitical Context**: If country is specified, analyze any geopolitical patterns.
+4.  **Potential Impact**: What is the potential impact of these IOCs on an organization?
+5.  **Actionable Recommendations**: Provide clear steps for detection (e.g., SIEM queries, IDS signatures) and mitigation (e.g., firewall rules, host-based blocking).
+{{#Indicator}}
+6.  **Specific Analysis for {{Indicator}}**: Provide a detailed analysis for this specific indicator if found in the results.
+{{/Indicator}}
+`
   }
 ];
 

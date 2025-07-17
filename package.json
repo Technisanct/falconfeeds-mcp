@@ -1,6 +1,6 @@
 {
   "name": "falconfeeds-mcp",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "Official MCP server for FalconFeeds.io threat intelligence data",
   "type": "module",
   "main": "dist/index.js",
@@ -33,7 +33,7 @@
     "@modelcontextprotocol/sdk": "^1.13.0",
     "zod": "^3.25.67"
   },
-  "devDependencies": {
+  "rsdevDependencies": {
     "@types/node": "^24.0.3",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
