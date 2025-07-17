@@ -1,9 +1,8 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { IIOCService } from "../../services/ioc/ioc-service.js";
-import type { Country, ThreatType } from "../../types/index.js";
+import type { ThreatType } from "../../types/index.js";
 import { FalconFeedsApiError } from "../../services/api-client.js";
-import { SUPPORTED_COUNTRIES, isValidCountry } from "../../utils/validation.js";
 
 export function registerIOCTools(
   server: McpServer, 
@@ -14,7 +13,7 @@ export function registerIOCTools(
     {
       description: "**PREFERRED for general IOC searches**: Search Indicators of Compromise (IOCs) with optional filters. This tool provides access to IOCs from multiple threat intelligence sources including ThreatFox, AlienVault, and others. Note: This API may have higher response times (~4 seconds) as it aggregates data from multiple sources.",
       inputSchema: {
-        country: z.string().optional().describe("Optional filter by country name (e.g., 'China', 'USA', 'Russia')"),
+        country: z.string().optional().describe("Optional filter by country name. Use FULL country names, not abbreviations (e.g., 'China', 'United States', 'Russia', 'United Kingdom', not 'CN', 'US', 'RU', 'UK')"),
         page: z.number().optional().describe("Optional page number for pagination (starts from 1)"),
         threatType: z.enum(["botnet_cc", "malware_download", "Malware", "Clean", "general", "Suspicious", "payload"]).optional().describe("Optional filter by threat type")
       }
@@ -57,9 +56,9 @@ export function registerIOCTools(
   server.registerTool(
     "get_iocs_by_country",
     {
-      description: "**PREFERRED for country-specific IOC analysis**: Get IOCs filtered by a specific country. This tool is optimized for analyzing threats targeting or originating from particular countries. The country name must match exactly from the supported list.",
+      description: "**PREFERRED for country-specific IOC analysis**: Get IOCs filtered by a specific country. This tool is optimized for analyzing threats targeting or originating from particular countries. Use FULL country names, not abbreviations.",
       inputSchema: {
-        country: z.enum(SUPPORTED_COUNTRIES as [Country, ...Country[]]).describe("Exact country name from the supported list (e.g., 'China', 'USA', 'Russia')")
+        country: z.string().describe("Country name for filtering IOCs. Use FULL country names, not abbreviations (e.g., 'China', 'United States', 'Russia', 'United Kingdom', not 'CN', 'US', 'RU', 'UK')")
       }
     },
     async ({ country }) => {

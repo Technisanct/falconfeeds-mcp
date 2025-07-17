@@ -228,6 +228,186 @@ DETAILED ANALYSIS SECTIONS:
 INTELLIGENCE SOURCES: Leverage get_threat_feeds_by_country tool for {{Country}}-specific threat intelligence. Supplement with threat actor profiling and cross-border attack pattern analysis from FalconFeeds database.
 
 CLASSIFICATION: Provide appropriate handling and distribution guidance for the intelligence contained within this assessment.`
+  },
+  {
+    name: "Darkweb Threat Intelligence Analysis",
+    description: "Analyze darkweb activities, marketplaces, and threat intelligence for comprehensive underground cyber threat assessment",
+    arguments: [
+      {
+        name: "Target Entity",
+        description: "Organization, industry, or threat actor to investigate for darkweb presence (e.g., 'Financial Services', 'Healthcare', 'LockBit')",
+        required: true
+      },
+      {
+        name: "Analysis Type",
+        description: "Type of darkweb analysis (e.g., 'data breach', 'credentials', 'malware', 'services')",
+        required: false
+      },
+      {
+        name: "Time Frame",
+        description: "Analysis time period (e.g., 'last 30 days', 'Q4 2024', 'YTD 2024')",
+        required: false
+      }
+    ],
+    template: `Conduct comprehensive darkweb threat intelligence analysis for {{Target Entity}}{{#Analysis Type}} focusing on {{Analysis Type}} activities{{/Analysis Type}}{{#Time Frame}} covering {{Time Frame}}{{/Time Frame}}.
+
+METHODOLOGY: Utilize FalconFeeds threat intelligence to analyze underground activities, data breaches, and darkweb marketplace intelligence. Focus on actionable intelligence for threat hunting and incident response teams.
+
+EXECUTIVE SUMMARY:
+Provide overview of darkweb threat landscape and key findings relevant to {{Target Entity}}.
+
+DETAILED ANALYSIS SECTIONS:
+
+1. **Darkweb Marketplace Intelligence**
+   - Active marketplaces offering services or data related to {{Target Entity}}
+   - Pricing and availability of stolen credentials or data
+   - Vendor reputation and reliability analysis
+   - Payment methods and transaction patterns
+
+2. **Data Breach and Leak Analysis**
+   - Confirmed data breaches involving {{Target Entity}} on darkweb forums
+   - Types of compromised data available (credentials, PII, financial data)
+   - Data freshness and verification status
+   - Distribution channels and accessibility
+
+3. **Threat Actor Underground Activities**
+   - Known threat actors targeting {{Target Entity}} sector
+   - Underground forum discussions and planning activities
+   - Recruitment and collaboration patterns
+   - Tools and services being advertised
+
+4. **Credential and Identity Intelligence**
+   - Compromised employee credentials availability
+   - Corporate email domain presence in breach databases
+   - Password patterns and security implications
+   - Multi-factor authentication bypass services
+
+5. **Cybercriminal Services and Tools**
+   - Ransomware-as-a-Service (RaaS) targeting {{Target Entity}} sector
+   - Custom malware development services
+   - Access broker services and initial access offerings
+   - Cryptocurrency laundering and payment services
+
+6. **Threat Indicators and IOCs**
+   - IP addresses and domains associated with darkweb activities
+   - Bitcoin addresses and cryptocurrency wallets
+   - Communication channels and contact methods
+   - Infrastructure patterns and hosting providers
+
+7. **Risk Assessment and Impact Analysis**
+   - Immediate threats requiring urgent attention
+   - Potential financial and reputational impact
+   - Compliance and regulatory implications
+   - Supply chain and third-party risks
+
+8. **Defensive Recommendations**
+   - Employee awareness and training priorities
+   - Technical controls and monitoring enhancements
+   - Incident response preparation guidelines
+   - Threat hunting focus areas and IOCs for monitoring
+
+INTELLIGENCE SOURCES: Leverage search_threat_feeds_with_images for visual evidence, get_threat_feeds_by_category for 'Data Breach' and 'Data Leak' categories, and get_threat_actor_profile for attribution analysis. Cross-reference with IOC data for infrastructure intelligence.
+
+OPERATIONAL SECURITY: Ensure proper handling of sensitive intelligence and maintain appropriate classification levels for darkweb-derived information.`
+  },
+  {
+    name: "Deep Web Telegram Channel Intelligence Analysis", 
+    description: "Analyze Telegram channels and deep web communications for threat intelligence, data leaks, and cybercriminal activities",
+    arguments: [
+      {
+        name: "Target Focus",
+        description: "Primary focus for Telegram intelligence (e.g., 'ransomware groups', 'data leak channels', 'specific threat actor', 'industry sector')",
+        required: true
+      },
+      {
+        name: "Geographic Region",
+        description: "Geographic focus area (e.g., 'Global', 'North America', 'Europe', 'Asia-Pacific')",
+        required: false
+      },
+      {
+        name: "Threat Category",
+        description: "Specific threat category to focus on (e.g., 'Ransomware', 'Data Breach', 'Malware', 'Phishing')",
+        required: false
+      }
+    ],
+    template: `Conduct comprehensive Telegram channel and deep web communication analysis for {{Target Focus}}{{#Geographic Region}} in {{Geographic Region}}{{/Geographic Region}}{{#Threat Category}} focusing on {{Threat Category}} activities{{/Threat Category}}.
+
+METHODOLOGY: Utilize FalconFeeds threat intelligence to analyze Telegram-based communications, announcements, and deep web activities. Focus on real-time threat intelligence and early warning indicators.
+
+EXECUTIVE SUMMARY:
+Provide overview of Telegram-based threat landscape and key intelligence findings for {{Target Focus}}.
+
+DETAILED INTELLIGENCE ANALYSIS:
+
+1. **Telegram Channel Ecosystem Mapping**
+   - Active channels related to {{Target Focus}}
+   - Channel membership statistics and growth patterns
+   - Administrative hierarchies and key figures
+   - Cross-channel relationships and collaborations
+
+2. **Communication Pattern Analysis**
+   - Message frequency and timing patterns
+   - Communication languages and geographic indicators
+   - Content types and media sharing patterns
+   - Encryption and operational security practices
+
+3. **Threat Actor Communications**
+   - Leadership announcements and strategic communications
+   - Recruitment and affiliate management activities
+   - Technical discussions and tool sharing
+   - Payment and financial coordination messages
+
+4. **Data Leak and Breach Announcements**
+   - Recent data leak announcements and victim claims
+   - Proof-of-compromise evidence and screenshots
+   - Data sale advertisements and pricing information
+   - Victim notification and extortion communications
+
+5. **Operational Intelligence**
+   - Attack planning and coordination activities
+   - Target selection and reconnaissance sharing
+   - Tool distribution and technical support
+   - Success metrics and impact reporting
+
+6. **Technical Infrastructure Analysis**
+   - Bot usage and automation patterns
+   - File sharing and distribution methods
+   - Payment system integration and cryptocurrency usage
+   - Backup channels and contingency communications
+
+7. **Geopolitical and Temporal Patterns**
+   - Regional targeting preferences and motivations
+   - Seasonal activity patterns and campaign timing
+   - Response to law enforcement actions
+   - Adaptation to platform restrictions and countermeasures
+
+8. **Early Warning Indicators**
+   - Pre-attack planning discussions
+   - Target list sharing and reconnaissance activities
+   - Tool testing and capability demonstrations
+   - Escalation indicators and threat level changes
+
+9. **Attribution and Network Analysis**
+   - Identity patterns and persona management
+   - Cross-platform presence and activity correlation
+   - Financial relationships and profit-sharing arrangements
+   - Technical fingerprints and operational patterns
+
+10. **Countermeasure Effectiveness Assessment**
+    - Response to disruption activities
+    - Platform migration patterns
+    - Operational security improvements
+    - Resilience and adaptation capabilities
+
+INTELLIGENCE COLLECTION STRATEGY: Utilize get_threat_actor_profile for known actors, search_threat_feeds_by_keyword for Telegram-related intelligence, and get_threat_feeds_by_category for relevant threat categories. Cross-reference with IOC data for infrastructure correlation.
+
+ACTIONABLE INTELLIGENCE OUTPUTS:
+- Priority threat actor identifiers and communication channels
+- IOCs for network monitoring and threat hunting
+- Early warning indicators for proactive defense
+- Attribution confidence levels and intelligence gaps
+
+OPERATIONAL CONSIDERATIONS: Maintain appropriate source protection and ensure compliance with platform terms of service and applicable regulations when utilizing Telegram-derived intelligence.`
   }
 ];
 
