@@ -29,7 +29,7 @@ class FalconFeedsMCPServer {
   constructor() {
     this.server = new McpServer({
       name: "falconfeeds-mcp-server",
-      version: "1.0.2"
+      version: "1.0.3"
     });
 
     this.initializeServices();
