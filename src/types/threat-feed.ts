@@ -24,6 +24,7 @@ export interface ThreatFeed {
   threatActors: ThreatActor[];
   network: string;
   images: string[];
+  imageUrls?: string[]; // Direct URLs to images, present only if query includeImages is true
   tags: string[];
   published: PublishedInfo;
   victims: Victim[];
@@ -412,4 +413,5 @@ export interface ThreatFeedQueryParams {
   uuid?: string;
   victimKey?: VictimKey;
   victimValue?: string;
+  includeImages?: boolean;
 } 
