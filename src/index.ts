@@ -15,7 +15,7 @@ import { registerThreatFeedTools } from "./tools/threat-feed/threat-feed-tools.j
 import { registerThreatActorTools } from "./tools/threat-actor/threat-actor-tools.js";
 import { registerIOCTools } from "./tools/ioc/ioc-tools.js";
 
-import { registerCybersecurityPrompts } from "./prompts/prompt-registry.js";
+import { officialDisclaimer, registerCybersecurityPrompts } from "./prompts/prompt-registry.js";
 
 class FalconFeedsMCPServer {
   private server: McpServer;
@@ -28,6 +28,7 @@ class FalconFeedsMCPServer {
 
   constructor() {
     this.server = new McpServer({
+      instructions: officialDisclaimer,
       name: "falconfeeds-mcp-server",
       version: "1.0.8"
     });

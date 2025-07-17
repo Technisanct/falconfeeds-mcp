@@ -411,6 +411,14 @@ OPERATIONAL CONSIDERATIONS: Maintain appropriate source protection and ensure co
   }
 ];
 
+export const officialDisclaimer = `
+This is an official MCP server from FalconFeeds. 
+FalconFeeds is an independent threat intelligence platform. 
+It is not affiliated, associated, authorized, endorsed by, or in any way officially connected with CrowdStrike, or any of its subsidiaries or its affiliates. 
+The name FalconFeeds is a registered trademark of the FalconFeeds organization. 
+The name CrowdStrike Falcon is a registered trademark of CrowdStrike.
+`.trim();
+
 export function registerCybersecurityPrompts(server: McpServer): void {
   CYBERSECURITY_PROMPTS.forEach(prompt => {
     const schemaFields: Record<string, z.ZodString | z.ZodOptional<z.ZodString>> = {};
