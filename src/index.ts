@@ -7,13 +7,11 @@ import { FalconFeedsApiClient } from "./services/api-client.js";
 import { CVEService } from "./services/cve/cve-service.js";
 import { ThreatFeedService } from "./services/threat-feed/threat-feed-service.js";
 import { ThreatActorService } from "./services/threat-actor/threat-actor-service.js";
-import { ThreatImageService } from "./services/threat-image/threat-image-service.js";
 import { getServerConfig } from "./config/server-config.js";
 
 import { registerCVETools } from "./tools/cve/cve-tools.js";
 import { registerThreatFeedTools } from "./tools/threat-feed/threat-feed-tools.js";
 import { registerThreatActorTools } from "./tools/threat-actor/threat-actor-tools.js";
-import { registerThreatImageTools } from "./tools/threat-image/threat-image-tools.js";
 
 import { registerCybersecurityPrompts } from "./prompts/prompt-registry.js";
 
@@ -24,7 +22,6 @@ class FalconFeedsMCPServer {
   private cveService!: CVEService;
   private threatFeedService!: ThreatFeedService;
   private threatActorService!: ThreatActorService;
-  private threatImageService!: ThreatImageService;
 
   constructor() {
     this.server = new McpServer({
@@ -52,14 +49,12 @@ class FalconFeedsMCPServer {
     this.cveService = new CVEService(this.apiClient);
     this.threatFeedService = new ThreatFeedService(this.apiClient);
     this.threatActorService = new ThreatActorService(this.apiClient);
-    this.threatImageService = new ThreatImageService(this.apiClient);
   }
 
   private registerAllTools(): void {
     registerCVETools(this.server, this.cveService);
     registerThreatFeedTools(this.server, this.threatFeedService, this.threatActorService);
     registerThreatActorTools(this.server, this.threatActorService);
-    registerThreatImageTools(this.server, this.threatImageService);
   }
 
   private registerAllPrompts(): void {

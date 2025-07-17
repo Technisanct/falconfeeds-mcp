@@ -15,9 +15,9 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_actor_profile",
     {
-      description: "Get comprehensive threat actor profile including attributed threat feeds. This tool automatically finds the threat actor by name and retrieves their associated threat feeds.",
+      description: "**PREFERRED for threat actor searches by name**: Get comprehensive threat actor profile including attributed threat feeds. Use this tool when you have a threat actor NAME (like 'LockBit', 'LEAKBASE', 'APT29') and want to find their profile and associated threat feeds. This automatically searches for the actor by name first, then retrieves their feeds.",
       inputSchema: {
-        actorName: z.string().describe("Name of the threat actor (e.g., 'LockBit', 'APT29', 'Lazarus Group')"),
+        actorName: z.string().describe("Name of the threat actor (e.g., 'LockBit', 'APT29', 'Lazarus Group', 'LEAKBASE')"),
         includeFeeds: z.boolean().optional().default(true).describe("Whether to include associated threat feeds (default: true)")
       }
     },
@@ -90,62 +90,6 @@ export function registerThreatFeedTools(
   );
 
   server.registerTool(
-    "search_threat_feeds",
-    {
-      description: "Search threat feeds with various filters",
-      inputSchema: {
-        next: z.string().optional().describe("Pagination token for next page"),
-        threatActorUUID: z.string().optional().describe("Filter by specific threat actor UUID"),
-        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Filter by threat category"),
-        keyword: z.string().optional().describe("Search keyword in threat feed content"),
-        victimKey: z.enum(["Country", "Industry", "Organization", "Site"]).optional().describe("Type of victim filter"),
-        victimValue: z.string().optional().describe("Value for victim filter")
-      }
-    },
-    async ({ next, threatActorUUID, category, keyword, victimKey, victimValue }) => {
-      try {
-        let response;
-        
-        if (threatActorUUID) {
-          response = await threatFeedService.getThreatFeedsByActor(threatActorUUID);
-        } else if (category) {
-          response = await threatFeedService.getThreatFeedsByCategory(category as any);
-        } else if (keyword) {
-          response = await threatFeedService.searchThreatFeedsByKeyword(keyword);
-        } else if (victimKey && victimValue) {
-          response = await threatFeedService.getThreatFeedsByVictim(victimKey as any, victimValue);
-        } else if (next) {
-          response = await threatFeedService.getNextPage(next);
-        } else {
-          response = await threatFeedService.searchThreatFeeds();
-        }
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(response, null, 2)
-            }
-          ]
-        };
-      } catch (error) {
-        if (error instanceof FalconFeedsApiError) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
-              }
-            ],
-            isError: true
-          };
-        }
-        throw error;
-      }
-    }
-  );
-
-  server.registerTool(
     "get_threat_feed_by_id",
     {
       description: "Get a specific threat feed by UUID",
@@ -185,9 +129,9 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_actor",
     {
-      description: "Get threat feeds associated with a specific threat actor",
+      description: "Get threat feeds for a threat actor when you already have their UUID. If you only have the actor's name, use 'get_threat_actor_profile' instead.",
       inputSchema: {
-        threatActorUUID: z.string().describe("Threat actor UUID")
+        threatActorUUID: z.string().describe("Threat actor UUID (if you only have the name, use get_threat_actor_profile tool)")
       }
     },
     async ({ threatActorUUID }) => {
@@ -259,9 +203,9 @@ export function registerThreatFeedTools(
   server.registerTool(
     "search_threat_feeds_by_keyword",
     {
-      description: "Search threat feeds by keyword",
+      description: "Perform full-text search on threat feed content and titles using keywords. Use this for general content searches, NOT for country names, industry names, or threat actor names (use their dedicated tools instead).",
       inputSchema: {
-        keyword: z.string().describe("Search keyword")
+        keyword: z.string().describe("Search keyword for full-text search in feed content (NOT for country/industry/actor names)")
       }
     },
     async ({ keyword }) => {
@@ -296,39 +240,14 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_victim",
     {
-      description: "Get threat feeds filtered by victim criteria",
+      description: "Get threat feeds filtered by organization name or website/domain. Use this ONLY for specific organization names or websites. For countries, use 'get_threat_feeds_by_country'. For industries, use 'get_threat_feeds_by_industry'.",
       inputSchema: {
-        victimKey: z.enum(["Country", "Industry", "Organization", "Site"]).describe("Type of victim filter"),
-        victimValue: z.string().describe("Value for the victim filter")
+        victimKey: z.enum(["Organization", "Site"]).describe("Type of victim filter: 'Organization' for company names, 'Site' for websites/domains"),
+        victimValue: z.string().describe("Specific organization name or website/domain to search for")
       }
     },
     async ({ victimKey, victimValue }) => {
       try {
-        // Validate values based on victim key type
-        if (victimKey === "Country" && !isValidCountry(victimValue)) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: getCountryValidationMessage(victimValue)
-              }
-            ],
-            isError: true
-          };
-        }
-
-        if (victimKey === "Industry" && !isValidIndustry(victimValue)) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: getIndustryValidationMessage(victimValue)
-              }
-            ],
-            isError: true
-          };
-        }
-
         const response = await threatFeedService.getThreatFeedsByVictim(victimKey as any, victimValue);
 
         return {
@@ -359,9 +278,9 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_country",
     {
-      description: "Get threat feeds filtered by specific country (with validation)",
+      description: "**PREFERRED for country-based threat landscape**: Get threat feeds where victims are from a specific country. Use this tool when searching for threats by country (e.g., 'UAE', 'USA', 'Germany'). The country name must match exactly from the supported list.",
       inputSchema: {
-        country: z.enum(SUPPORTED_COUNTRIES as [Country, ...Country[]]).describe("Country name from the supported list")
+        country: z.enum(SUPPORTED_COUNTRIES as [Country, ...Country[]]).describe("Exact country name from the supported list (e.g., 'UAE', 'USA', 'Germany')")
       }
     },
     async ({ country }) => {
@@ -396,9 +315,9 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_industry",
     {
-      description: "Get threat feeds filtered by specific industry (with validation)",
+      description: "**PREFERRED for industry-based threat analysis**: Get threat feeds where victims are from a specific industry sector. Use this tool when analyzing threats by industry (e.g., 'Healthcare & Pharmaceuticals', 'Financial Services', 'Government & Public Sector'). The industry name must match exactly from the supported list.",
       inputSchema: {
-        industry: z.enum(SUPPORTED_INDUSTRIES as any).describe("Industry name from the supported list")
+        industry: z.enum(SUPPORTED_INDUSTRIES as any).describe("Exact industry name from the supported list (e.g., 'Healthcare & Pharmaceuticals', 'Financial Services')")
       }
     },
     async ({ industry }) => {
@@ -441,6 +360,70 @@ export function registerThreatFeedTools(
     async ({ nextToken }) => {
       try {
         const response = await threatFeedService.getNextPage(nextToken);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(response, null, 2)
+            }
+          ]
+        };
+      } catch (error) {
+        if (error instanceof FalconFeedsApiError) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
+              }
+            ],
+            isError: true
+          };
+        }
+        throw error;
+      }
+    }
+  );
+
+  server.registerTool(
+    "search_threat_feeds_with_images",
+    {
+      description: "**PREFERRED for comprehensive threat feed searches that need direct image urls**: Search threat feeds with direct image URLs included. This tool automatically includes image URLs in the response, providing direct access to screenshots and visual evidence from threat feeds. Use this for general threat intelligence gathering when you need complete information including visual assets.",
+      inputSchema: {
+        keyword: z.string().optional().describe("Optional keyword for full-text search in feed content"),
+        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional threat category filter"),
+        threatActorUUID: z.string().optional().describe("Optional threat actor UUID filter"),
+        victimKey: z.enum(["Country", "Industry", "Organization", "Site"]).optional().describe("Optional victim filter type"),
+        victimValue: z.string().optional().describe("Optional victim filter value (required if victimKey is specified)"),
+        next: z.string().optional().describe("Optional pagination token for next page")
+      }
+    },
+    async ({ keyword, category, threatActorUUID, victimKey, victimValue, next }) => {
+      try {
+        // Validate that victimValue is provided if victimKey is specified
+        if (victimKey && !victimValue) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: "Error: victimValue is required when victimKey is specified"
+              }
+            ],
+            isError: true
+          };
+        }
+
+        const params: any = { includeImages: true };
+        
+        if (keyword) params.keyword = keyword;
+        if (category) params.category = category;
+        if (threatActorUUID) params.threatActorUUID = threatActorUUID;
+        if (victimKey) params.victimKey = victimKey;
+        if (victimValue) params.victimValue = victimValue;
+        if (next) params.next = next;
+
+        const response = await threatFeedService.searchThreatFeeds(params);
 
         return {
           content: [
