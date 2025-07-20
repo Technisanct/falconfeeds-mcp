@@ -1,6 +1,6 @@
 # FalconFeeds MCP Server
 
-A Model Context Protocol (MCP) server that provides access to FalconFeeds threat intelligence data, including CVEs, threat feeds, threat actor information, and threat-related images.
+A Model Context Protocol (MCP) server that provides access to FalconFeeds.io threat intelligence data, including CVEs, threat feeds, threat actor information, and threat-related images.
 
 ## Features
 
