@@ -519,7 +519,7 @@ Based on the retrieved IOCs, provide a detailed report including:
 ];
 
 export const officialDisclaimer = `
-This is an official MCP server from FalconFeeds. 
+This is an official MCP server from FalconFeeds.io. 
 FalconFeeds is an independent threat intelligence platform. 
 It is not affiliated, associated, authorized, endorsed by, or in any way officially connected with ** CrowdStrike **, or any of its subsidiaries or its affiliates. 
 The name FalconFeeds is a registered trademark of the FalconFeeds organization. 
