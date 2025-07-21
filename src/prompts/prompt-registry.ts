@@ -37,10 +37,10 @@ export const CYBERSECURITY_PROMPTS: PromptConfig[] = [
       5. Target Analysis
       6. Recent Activity Summary
       7. Indicators of Compromise (IOCs)
-      8. Defensive Recommendations
-      9. Risk Assessment
+      8. Indicators and Patterns
+      9. Data Summary
     
-    IMPORTANT: Use the get_threat_actor_profile tool first to get comprehensive actor information and attributed threat feeds. This ensures accurate attribution and the most relevant intelligence. Supplement with additional CVE and threat feed searches as needed. Provide actionable intelligence for SOC teams and threat hunters.`
+    IMPORTANT: Use the get_threat_actor_profile tool first to get comprehensive actor information and attributed threat feeds. This ensures accurate attribution and the most relevant intelligence. Supplement with additional CVE and threat feed searches as needed. Provide threat data and indicators for analysis.`
   },
   {
     name: "CVE Impact Assessment",
@@ -102,22 +102,22 @@ Provide a comprehensive risk evaluation:
    - Network segmentation and access controls
    - Current security controls effectiveness
 
-**Phase 5: Actionable Recommendations**
-Deliver prioritized guidance:
-1. **Immediate Actions (0-24 hours)**
-   - Emergency patching priorities
-   - Temporary mitigations and workarounds
-   - Network-level protections
+**Phase 5: Threat Data Summary**
+Deliver structured data analysis:
+1. **Immediate Threat Indicators (0-24 hours)**
+   - Critical vulnerability data points
+   - Active exploitation indicators
+   - Network-level threat patterns
 
-2. **Short-term Actions (1-7 days)**
-   - Systematic patching plan
-   - Detection and monitoring enhancements
-   - Incident response preparation
+2. **Short-term Threat Patterns (1-7 days)**
+   - Systematic vulnerability trends
+   - Detection pattern data
+   - Incident correlation data
 
-3. **Long-term Strategic Actions**
-   - Architecture and security improvements
-   - Vulnerability management process updates
-   - Security awareness and training needs
+3. **Long-term Threat Analysis**
+   - Architecture vulnerability patterns
+   - Vulnerability management data trends
+   - Security awareness data points
 
 **Phase 6: Executive Summary**
 Conclude with a concise executive briefing including:
@@ -157,8 +157,8 @@ Use FalconFeeds data throughout the analysis to ensure accuracy and provide evid
     4. Target Industry and Geographic Analysis
     5. Recent Campaign Highlights
     6. Victim Impact Assessment
-    7. Detection and Prevention Strategies
-    8. Threat Intelligence Recommendations
+    7. Observed Attack Patterns
+    8. Threat Intelligence Data Analysis
   Use FalconFeeds threat feed data filtered by {{Threat Category}} category to provide current intelligence.`
   },
   {
@@ -186,8 +186,8 @@ Cover:
 5. Recent High-Impact Incidents
 6. Industry-Specific Vulnerabilities
 7. Regional Threat Patterns
-8. Defensive Best Practices
-9. Threat Intelligence Recommendations
+8. Threat Pattern Data Analysis
+9. Threat Intelligence Data Analysis
 
 Utilize FalconFeeds threat feed data filtered by industry and geographic targeting to provide current intelligence.`
   },
@@ -217,7 +217,7 @@ Analyze and compare:
 6. Activity Timelines and Patterns
 7. Potential Relationships or Collaborations
 8. Threat Level Assessment
-9. Detection and Mitigation Strategies
+9. Observed Attack Patterns
 
 Use get_threat_actor_profile for each actor to gather comprehensive intelligence and compare their attributed activities from FalconFeeds.`
   },
@@ -279,11 +279,11 @@ DETAILED ANALYSIS SECTIONS:
    - Attribution challenges and uncertainties
    - Emerging threat vectors requiring monitoring
 
-6. **Strategic Recommendations**
-   - National cybersecurity posture improvements
-   - Sector-specific defensive priorities
-   - International cooperation opportunities
-   - Threat hunting focus areas
+6. **Strategic Data Analysis**
+   - National cybersecurity threat patterns
+   - Sector-specific threat data points
+   - International threat correlation data
+   - Threat pattern focus areas
 
 7. **Indicators and Warning Signs**
    - Key indicators of compromise (IOCs)
@@ -365,11 +365,11 @@ DETAILED ANALYSIS SECTIONS:
    - Compliance and regulatory implications
    - Supply chain and third-party risks
 
-8. **Defensive Recommendations**
-   - Employee awareness and training priorities
-   - Technical controls and monitoring enhancements
-   - Incident response preparation guidelines
-   - Threat hunting focus areas and IOCs for monitoring
+8. **Data Analysis Summary**
+   - Employee threat exposure data
+   - Technical threat pattern monitoring data
+   - Incident correlation data analysis
+   - Threat pattern focus areas and IOCs for analysis
 
 INTELLIGENCE SOURCES: Leverage search_threat_feeds_with_images for visual evidence, get_threat_feeds_by_category for 'Data Breach' and 'Data Leak' categories, and get_threat_actor_profile for attribution analysis. Cross-reference with IOC data for infrastructure intelligence.
 
@@ -458,11 +458,11 @@ DETAILED INTELLIGENCE ANALYSIS:
    - Financial relationships and profit-sharing arrangements
    - Technical fingerprints and operational patterns
 
-10. **Countermeasure Effectiveness Assessment**
-    - Response to disruption activities
-    - Platform migration patterns
-    - Operational security improvements
-    - Resilience and adaptation capabilities
+10. **Threat Pattern Assessment**
+    - Response to disruption activities data
+    - Platform migration patterns data
+    - Operational security pattern improvements
+    - Resilience and adaptation capability data
 
 INTELLIGENCE COLLECTION STRATEGY: Utilize get_threat_actor_profile for known actors, search_threat_feeds_by_keyword for Telegram-related intelligence, and get_threat_feeds_by_category for relevant threat categories. Cross-reference with IOC data for infrastructure correlation.
 
@@ -510,7 +510,7 @@ Based on the retrieved IOCs, provide a detailed report including:
 2.  **Threat Context**: What kind of threats are these IOCs associated with? (e.g., malware campaigns, botnets).
 3.  **Geopolitical Context**: If country is specified, analyze any geopolitical patterns.
 4.  **Potential Impact**: What is the potential impact of these IOCs on an organization?
-5.  **Actionable Recommendations**: Provide clear steps for detection (e.g., SIEM queries, IDS signatures) and mitigation (e.g., firewall rules, host-based blocking).
+5.  **Data Analysis**: Provide clear data points for detection patterns (e.g., SIEM query data, IDS signature patterns) and threat indicators (e.g., firewall rule data, host-based indicator patterns).
 {{#Indicator}}
 6.  **Specific Analysis for {{Indicator}}**: Provide a detailed analysis for this specific indicator if found in the results.
 {{/Indicator}}
