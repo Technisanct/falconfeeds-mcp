@@ -30,7 +30,7 @@ class FalconFeedsMCPServer {
     this.server = new McpServer({
       instructions: officialDisclaimer,
       name: "falconfeeds-mcp-server",
-      version: "1.1.0"
+      version: "0.0.1"
     });
 
     this.initializeServices();
