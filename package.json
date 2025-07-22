@@ -1,6 +1,6 @@
 {
   "name": "@falconfeeds/mcp",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Official MCP server for FalconFeeds.io threat intelligence data",
   "type": "module",
   "main": "dist/index.js",
@@ -25,7 +25,11 @@
     "threat-actor"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Technisanct/falconfeeds-mcp.git"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
