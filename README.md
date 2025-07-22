@@ -1,6 +1,7 @@
 # FalconFeeds MCP Server
 
-A Model Context Protocol (MCP) server that provides access to FalconFeeds.io threat intelligence data, including CVEs, threat feeds, threat actor information, and threat-related images.
+Official MCP server for FalconFeeds.io, delivering real-time threat intelligence—including IOCs, CVEs, TTPs, and threat actor data—via the Model Context Protocol (MCP).
+Built for seamless integration with AI assistants, it enables context-aware querying of FalconFeeds’ cybersecurity data streams.
 
 ## Features
 
@@ -19,36 +20,64 @@ A Model Context Protocol (MCP) server that provides access to FalconFeeds.io thr
 
 ### Setup
 
+#### Option 1: Run Locally
+
 1. Clone or download this repository
-2. Install dependencies:
+2. Move to your project directory:
+   ```bash
+   cd falconfeeds-mcp
+   ```
+
+3. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Build the project:
+4. Build the project:
    ```bash
    npm run build
    ```
 
-4. Set up your environment variables:
-   ```bash
-   export FALCONFEEDS_API_KEY="your_api_key_here"
-   export FALCONFEEDS_TIMEOUT="30000"  # Optional, defaults to 30 seconds
+5. Configure in your MCP client (e.g., Claude Desktop):
+   ```json
+   "falconfeeds": {
+     "command": "node",
+     "args": [
+       "path/to/your/falconfeeds-mcp/dist/index.js"
+     ],
+     "env": {
+       "FALCONFEEDS_API_KEY": "your_api_key_here",
+       "FALCONFEEDS_TIMEOUT": "30000"
+     }
+   }
    ```
 
+#### Option 2: NPX Installation
+
+Use the published package directly:
+```json
+"falconfeeds": {
+  "command": "npx",
+  "args": [
+    "-y",
+    "@falconfeeds/mcp@latest"
+  ],
+  "env": {
+    "FALCONFEEDS_API_KEY": "your_api_key_here",
+    "FALCONFEEDS_TIMEOUT": "30000"
+  }
+}
+```
+
+#### Environment Variables (Alternative)
+
+You can also set up environment variables globally:
+```bash
+export FALCONFEEDS_API_KEY="your_api_key_here"
+export FALCONFEEDS_TIMEOUT="30000"  # Optional, defaults to 30 seconds
+```
+
 ## Usage
-
-### Running the Server
-
-Start the server in development mode:
-```bash
-npm run dev
-```
-
-Or run the built version:
-```bash
-npm start
-```
 
 ### Configuration
 
