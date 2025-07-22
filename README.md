@@ -1,192 +1,224 @@
-# FalconFeeds MCP Server
+<div align="center">
+  <img src="https://d1898qjf7hzy9p.cloudfront.net/icons/FFLogo-WhiteBorder.svg" alt="FalconFeeds Logo" width="200" height="auto">
+  
+  # FalconFeeds MCP Server
+  
+  [![npm version](https://badge.fury.io/js/@falconfeeds%2Fmcp.svg?icon=si%3Anpm)](https://badge.fury.io/js/@falconfeeds%2Fmcp)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  
+  **MCP server providing cybersecurity threat intelligence tools and resources**
+  
+  [Documentation](https://dash.falconfeeds.io/mcp/docs) • [API Reference](https://dash.falconfeeds.io/api/docs) • [Dashboard](https://dash.falconfeeds.io) • [Support](https://falconfeeds.io/contact)
+</div>
 
-Official MCP server for FalconFeeds.io, delivering real-time threat intelligence—including IOCs, CVEs, TTPs, and threat actor data—via the Model Context Protocol (MCP).
-Built for seamless integration with AI assistants, it enables context-aware querying of FalconFeeds’ cybersecurity data streams.
+---
+
+Connect real-time cybersecurity threat intelligence to MCP clients through standardized tools and resources. Access comprehensive IOCs, CVEs, TTPs, and threat actor data from [FalconFeeds.io](https://falconfeeds.io) with seamless integration across Claude Desktop, VS Code, and other MCP-enabled applications.
 
 ## Features
 
-- **CVE Intelligence**: Search and retrieve Common Vulnerabilities and Exposures data
-- **Threat Feeds**: Access real-time threat intelligence feeds
-- **Threat Actors**: Get detailed information about threat actors and groups
-- **Threat Images**: Retrieve screenshots and images from threat feeds
-- **Cybersecurity Prompts**: Pre-built prompts for threat intelligence analysis
+- **CVE Intelligence**: Search and retrieve Common Vulnerabilities and Exposures data with detailed analysis
+- **Threat Feeds**: Access real-time threat intelligence feeds from global sources  
+- **Threat Actors**: Get detailed profiles of threat actors and cybercriminal groups
+- **Threat Images**: Retrieve screenshots and visual evidence from threat feeds
+- **IOC Management**: Handle Indicators of Compromise with enrichment capabilities
+- **MCP Prompts**: Pre-built cybersecurity prompts optimized for threat analysis workflows
 
-## Installation
+## Installation Options
 
-### Prerequisites
+### NPX Installation (Recommended)
 
-- Node.js 18.0.0 or higher
-- FalconFeeds API key
+Add the server to your MCP client configuration:
 
-### Setup
-
-#### Option 1: Run Locally
-
-1. Clone or download this repository
-2. Move to your project directory:
-   ```bash
-   cd falconfeeds-mcp
-   ```
-
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-4. Build the project:
-   ```bash
-   npm run build
-   ```
-
-5. Configure in your MCP client (e.g., Claude Desktop):
-   ```json
-   "falconfeeds": {
-     "command": "node",
-     "args": [
-       "path/to/your/falconfeeds-mcp/dist/index.js"
-     ],
-     "env": {
-       "FALCONFEEDS_API_KEY": "your_api_key_here",
-       "FALCONFEEDS_TIMEOUT": "30000"
-     }
-   }
-   ```
-
-#### Option 2: NPX Installation
-
-Use the published package directly:
 ```json
-"falconfeeds": {
-  "command": "npx",
-  "args": [
-    "-y",
-    "@falconfeeds/mcp@latest"
-  ],
-  "env": {
-    "FALCONFEEDS_API_KEY": "your_api_key_here",
-    "FALCONFEEDS_TIMEOUT": "30000"
+{
+  "mcpServers": {
+    "falconfeeds": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@falconfeeds/mcp@latest"
+      ],
+      "env": {
+        "FALCONFEEDS_API_KEY": "your_api_key_here",
+        "FALCONFEEDS_TIMEOUT": "30000"
+      }
+    }
   }
 }
 ```
 
-#### Environment Variables (Alternative)
+### Local Development
 
-You can also set up environment variables globally:
+Clone and build the repository for development or customization: 
 ```bash
-export FALCONFEEDS_API_KEY="your_api_key_here"
-export FALCONFEEDS_TIMEOUT="30000"  # Optional, defaults to 30 seconds
+git clone https://github.com/Technisanct/falconfeeds-mcp.git
+cd falconfeeds-mcp
+```
+Install dependencies
+```bash
+npm install
+```
+Build the project
+```bash
+npm run build
+```
+Configure your MCP client:
+```json
+{
+  "mcpServers": {
+    "falconfeeds": {
+      "command": "node",
+      "args": [
+        "/path/to/falconfeeds-mcp/dist/index.js"
+      ],
+      "env": {
+        "FALCONFEEDS_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
 ```
 
-## Usage
+### Getting Your API Key
 
-### Configuration
+1. Visit [FalconFeeds Dashboard](https://dash.falconfeeds.io)
+2. Sign up or log in to your account
+3. Navigate to **Settings**
+4. Navigate to **API Access**
+5. Generate your **API key**
+6. Copy the key to your environment configuration
 
-The server requires the following environment variables:
+> [!NOTE]
+> Make sure you have a valid plan and sufficient API credits
 
-- `FALCONFEEDS_API_KEY` (required): Your FalconFeeds API key
-- `FALCONFEEDS_TIMEOUT` (optional): Request timeout in milliseconds (default: 30000)
+## Client Integration
 
-### Available Tools
+## MCP Tools
 
-#### CVE Tools
-- `search_cves`: Search for CVEs with various filters
-- `get_cve_by_id`: Get specific CVE by ID
-- `search_cves_by_keyword`: Search CVEs by keyword
-- `get_cves_by_date_range`: Get CVEs within a date range
-- `get_next_cve_page`: Get next page of CVE results
+### CVE Operations
+- **`search_cves`**: Search CVEs with CVSS scores, date ranges, and keyword filters
+- **`get_cve_by_id`**: Retrieve specific CVE details by identifier
+- **`search_cves_by_keyword`**: Find CVEs matching specific terms
+- **`get_cves_by_date_range`**: Get CVEs within specified time periods
+- **`get_next_cve_page`**: Paginate through large CVE result sets
 
-#### Threat Feed Tools
-- `search_threat_feeds`: Search threat feeds with filters
-- `get_threat_feed_by_id`: Get specific threat feed by UUID
-- `get_threat_feeds_by_actor`: Get feeds for specific threat actor
-- `get_threat_feeds_by_category`: Get feeds by category
-- `search_threat_feeds_by_keyword`: Search feeds by keyword
-- `get_threat_feeds_by_victim`: Get feeds targeting specific victims
-- `get_next_threat_feed_page`: Get next page of feed results
+### Threat Feed Operations  
+- **`search_threat_feeds`**: Query threat feeds with comprehensive filters
+- **`get_threat_feed_by_id`**: Get specific threat feed by UUID
+- **`get_threat_feeds_by_actor`**: Find feeds associated with threat actors
+- **`get_threat_feeds_by_category`**: Filter feeds by threat categories
+- **`search_threat_feeds_by_keyword`**: Search feeds using keywords
+- **`get_threat_feeds_by_victim`**: Get feeds targeting specific victims
+- **`get_next_threat_feed_page`**: Navigate through paginated results
 
-#### Threat Actor Tools
-- `search_threat_actors`: Search threat actors
-- `get_threat_actor_by_id`: Get specific threat actor by UUID
-- `search_threat_actors_by_name`: Search actors by name
-- `get_next_threat_actor_page`: Get next page of actor results
+### Threat Actor Operations
+- **`search_threat_actors`**: Search and filter threat actor profiles
+- **`get_threat_actor_by_id`**: Get detailed threat actor information
+- **`search_threat_actors_by_name`**: Find actors by name or alias
+- **`get_next_threat_actor_page`**: Paginate actor search results
 
-#### Threat Image Tools
-- `get_threat_image`: Get threat image by UUID
-- `get_threat_image_as_base64`: Get image in base64 format
-- `get_threat_image_as_blob`: Get image as blob
+### IOC Operations
+- **`search_iocs`**: Search and analyze Indicators of Compromise
+- **`get_ioc_by_id`**: Retrieve specific IOC details
+- **`search_iocs_by_type`**: Filter IOCs by type (IP, domain, hash, etc.)
+- **`get_next_ioc_page`**: Navigate IOC result pagination
 
-### Available Prompts
+### Threat Image Operations
+- **`get_threat_image_as_base64`**: Get images in base64 encoding
 
-The server includes specialized prompts for cybersecurity professionals:
+## MCP Prompts
 
-1. **threat_intelligence_report**: Generate comprehensive threat intelligence reports
-2. **cve_impact_assessment**: Assess CVE impact and urgency
-3. **incident_threat_correlation**: Correlate incidents with threat actors
-4. **vulnerability_trend_analysis**: Analyze vulnerability trends
-5. **threat_hunting_playbook**: Create threat hunting procedures
-6. **supply_chain_threat_analysis**: Analyze supply chain threats
-7. **ioc_enrichment_analysis**: Enrich indicators of compromise
-8. **sector_threat_briefing**: Generate sector-specific threat briefings
-9. **malware_family_analysis**: Analyze malware families
-10. **geopolitical_threat_assessment**: Assess geopolitical cyber threats
+The server provides cybersecurity-focused prompts designed for threat intelligence workflows:
 
-## API Endpoints
+1. **Threat Intelligence Report**: Generate comprehensive threat reports
+2. **CVE Impact Assessment**: Analyze vulnerability impact and prioritization  
+3. **Incident Threat Correlation**: Correlate security incidents with known threats
+4. **Vulnerability Trend Analysis**: Identify patterns in vulnerability disclosure
+5. **Threat Hunting Playbook**: Create systematic threat hunting procedures
+6. **Supply Chain Threat Analysis**: Analyze third-party and supply chain risks
+7. **IOC Enrichment Analysis**: Enhance indicators with threat context
+8. **Sector Threat Briefing**: Generate industry-specific threat briefings
+9. **Malware Family Analysis**: Deep-dive into malware characteristics
+10. **Geopolitical Threat Assessment**: Analyze nation-state and political threats
 
-The server provides access to the following FalconFeeds API endpoints:
+## Testing & Development
 
-- `/cve` - CVE information
-- `/threat/feed` - Threat intelligence feeds
-- `/threat/actor` - Threat actor information
-- `/threat/image` - Threat feed images
+### Testing with MCP Inspector
 
-## Development
+Test server tools and prompts using the MCP Inspector:
 
-### Project Structure
-
+```bash
+npx @modelcontextprotocol/inspector npx -y @falconfeeds/mcp@latest
 ```
-src/
-├── config/           # Configuration files
-├── services/         # Service layer (organized by endpoint)
-│   ├── cve/
-│   ├── threat-feed/
-│   ├── threat-actor/
-│   └── threat-image/
-├── tools/            # MCP tools (organized by endpoint)
-│   ├── cve/
-│   ├── threat-feed/
-│   ├── threat-actor/
-│   └── threat-image/
-├── types/            # TypeScript type definitions
-├── prompts/          # Cybersecurity prompts
-└── index.ts          # Main server entry point
+### Usage Examples
+
+**Threat Intelligence Query:**
+```
+"Search for recent CVEs affecting Apache products with CVSS score above 7.0"
 ```
 
-### Adding New Endpoints
+**Threat Actor Investigation:**
+```
+"Get information about APT29 and their recent campaigns targeting government sectors"
+```
 
-To add a new FalconFeeds API endpoint:
+**IOC Analysis:**
+```
+"Analyze this IP address for malicious activity: 192.168.1.100"
+```
 
-1. Add the endpoint configuration to `src/config/api-endpoints.ts`
-2. Create the TypeScript interfaces in `src/types/falconfeeds.ts`
-3. Create a service class in `src/services/[endpoint-name]/`
-4. Create MCP tools in `src/tools/[endpoint-name]/`
-5. Register the tools in `src/index.ts`
+## Troubleshooting
 
-### Adding New Prompts
+### Common Issues
 
-To add new cybersecurity prompts:
+**API Key Not Working:**
+- Verify your API key is correctly copied from the FalconFeeds dashboard
+- Ensure the key has not expired or been revoked
+- Check that the key is properly set in your environment configuration
+- Ensure you have enough credits
 
-1. Add the prompt configuration to `CYBERSECURITY_PROMPTS` in `src/prompts/prompt-registry.ts`
-2. The prompt will be automatically registered when the server starts
+**NPX Installation Issues:**
+- Ensure you have Node.js 18.0.0 or higher installed
+- Try clearing npm cache: `npm cache clean --force`
+- Use the `-y` flag to auto-accept package installations
 
-## License
+**MCP Client Connection Issues:**
+- Restart your MCP client after server configuration changes
+- Verify JSON configuration syntax is valid
+- Check client logs for connection errors
+- Ensure the server process starts correctly
 
-ISC
+### Getting Help
+
+- **Documentation**: [https://dash.falconfeeds.io/mcp/docs](https://dash.falconfeeds.io/mcp/docs)
+- **Falconfeeds API Documentation**: [https://dash.falconfeeds.io/api/docs](https://dash.falconfeeds.io/api/docs)
+- **Bug Reports**: Create an issue on GitHub with detailed error information
+- **Community Support**: Join our community discussions for help and tips
+- **Enterprise Support**: Contact FalconFeeds support for enterprise assistance
 
 ## Contributing
 
-This project follows SOLID principles and clean architecture patterns. Please ensure:
+We welcome contributions from the cybersecurity and development communities!
 
-- Each endpoint has its own service and tools directory
-- All API responses are properly typed
-- Error handling follows the established patterns
-- New prompts are relevant to cybersecurity professionals 
+### Development Guidelines
+
+- Follow existing code patterns and architecture
+- Update documentation for any tools, prompt changes
+- Ensure TypeScript strict mode compliance
+
+
+
+## License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Built with the [Model Context Protocol](https://modelcontextprotocol.io)
+- Powered by [FalconFeeds.io](https://falconfeeds.io) threat intelligence platform
+- TypeScript and Node.js ecosystem contributors
+- Cybersecurity community for feedback and feature requests
+
+---
