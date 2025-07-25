@@ -1,13 +1,96 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { IThreatActorService } from "../../services/threat-actor/threat-actor-service.js";
+import type { IThreatFeedService } from "../../services/threat-feed/threat-feed-service.js";
 import { FalconFeedsApiError } from "../../services/api-client.js";
 
-export function registerThreatActorTools(server: McpServer, threatActorService: IThreatActorService): void {
+export function registerThreatActorTools(
+  server: McpServer, 
+  threatActorService: IThreatActorService,
+  threatFeedService: IThreatFeedService
+): void {
+  // Smart tool that implements the better flow automatically
+  server.registerTool(
+    "get_threat_actor_profile",
+    {
+      description: "**PREFERRED for threat actor searches by name**: Get comprehensive threat actor profile including attributed threat feeds. Use this tool when you have a threat actor NAME (like 'LockBit', 'LEAKBASE', 'APT29') and want to find their profile and associated threat feeds. This automatically searches for the actor by name first, then retrieves their feeds. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed.",
+      inputSchema: {
+        actorName: z.string().describe("Name of the threat actor (e.g., 'LockBit', 'APT29', 'Lazarus Group', 'LEAKBASE')"),
+        includeFeeds: z.boolean().optional().default(true).describe("Whether to include associated threat feeds (default: true)")
+      }
+    },
+    async ({ actorName, includeFeeds = true }) => {
+      try {
+        // Step 1: Search for the threat actor by name
+        const actorSearchResponse = await threatActorService.searchThreatActorsByName(actorName);
+        
+        if (!actorSearchResponse.data || actorSearchResponse.data.length === 0) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `No threat actor found with name: "${actorName}". Please check the spelling or try a different name.`
+              }
+            ]
+          };
+        }
+
+        // Get the first matching actor (most relevant)
+        const threatActor = actorSearchResponse.data[0];
+        
+        let result: any = {
+          threatActor: threatActor,
+          searchQuery: actorName,
+          matchedActors: actorSearchResponse.data.length
+        };
+
+        // Step 2: If requested, get threat feeds attributed to this actor
+        if (includeFeeds) {
+          try {
+            const feedsResponse = await threatFeedService.getThreatFeedsByActor(threatActor.uuid);
+            result.attributedFeeds = {
+              count: feedsResponse.data?.length || 0,
+              feeds: feedsResponse.data || [],
+              hasMore: !!feedsResponse.next,
+              nextToken: feedsResponse.next
+            };
+          } catch (feedError) {
+            result.attributedFeeds = {
+              error: "Failed to retrieve attributed threat feeds",
+              details: feedError instanceof FalconFeedsApiError ? feedError.message : "Unknown error"
+            };
+          }
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2)
+            }
+          ]
+        };
+      } catch (error) {
+        if (error instanceof FalconFeedsApiError) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
+              }
+            ],
+            isError: true
+          };
+        }
+        throw error;
+      }
+    }
+  );
+
   server.registerTool(
     "search_threat_actors",
     {
-      description: "Search threat actors with optional filters",
+      description: "Search threat actors with optional filters. Use 'get_next_threat_actor_page' tool to get more results when pagination is needed.",
       inputSchema: {
         next: z.string().optional().describe("Pagination token for next page"),
         uuid: z.string().optional().describe("Get specific threat actor by UUID"),
@@ -93,7 +176,7 @@ export function registerThreatActorTools(server: McpServer, threatActorService: 
   server.registerTool(
     "search_threat_actors_by_name",
     {
-      description: "Search threat actors by name prefix",
+      description: "Search threat actors by name prefix. Use 'get_next_threat_actor_page' tool to get more results when pagination is needed.",
       inputSchema: {
         name: z.string().describe("Threat actor name prefix to search for")
       }

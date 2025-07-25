@@ -98,22 +98,22 @@ Configure your MCP client:
 ## MCP Tools
 
 ### CVE Operations
-- **`search_cves`**: Search CVEs with CVSS scores, date ranges, and keyword filters
 - **`get_cve_by_id`**: Retrieve specific CVE details by identifier
 - **`search_cves_by_keyword`**: Find CVEs matching specific terms
 - **`get_cves_by_date_range`**: Get CVEs within specified time periods
 - **`get_next_cve_page`**: Paginate through large CVE result sets
 
 ### Threat Feed Operations  
-- **`search_threat_feeds`**: Query threat feeds with comprehensive filters
 - **`get_threat_feed_by_id`**: Get specific threat feed by UUID
 - **`get_threat_feeds_by_actor`**: Find feeds associated with threat actors
 - **`get_threat_feeds_by_category`**: Filter feeds by threat categories
 - **`search_threat_feeds_by_keyword`**: Search feeds using keywords
-- **`get_threat_feeds_by_victim`**: Get feeds targeting specific victims
+- **`get_threat_feeds_by_organization`**: Get feeds targeting specific organizations
+- **`get_threat_feeds_by_domain`**: Get feeds targeting specific websites or domains
 - **`get_next_threat_feed_page`**: Navigate through paginated results
 
 ### Threat Actor Operations
+- **`get_threat_actor_profile`**: Get comprehensive threat actor profile with associated feeds
 - **`search_threat_actors`**: Search and filter threat actor profiles
 - **`get_threat_actor_by_id`**: Get detailed threat actor information
 - **`search_threat_actors_by_name`**: Find actors by name or alias
