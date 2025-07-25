@@ -11,7 +11,7 @@ export function registerIOCTools(
   server.registerTool(
     "search_iocs",
     {
-      description: "**PREFERRED for general IOC searches**: Search Indicators of Compromise (IOCs) with optional filters. This API may have higher response times (~4 seconds) as it aggregates data from multiple sources.",
+      description: "**PREFERRED for general IOC searches**: Search Indicators of Compromise (IOCs) with optional filters. This API may have higher response times (~4 seconds) as it aggregates data from multiple sources. Use 'get_iocs_page' tool to get more results when pagination is needed.",
       inputSchema: {
         country: z.string().optional().describe("Country name for filtering IOCs. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),
         page: z.number().optional().describe("Optional page number for pagination (starts from 1)"),
@@ -56,7 +56,7 @@ export function registerIOCTools(
   server.registerTool(
     "get_iocs_by_country",
     {
-      description: "**PREFERRED for country-specific IOC analysis**: Get IOCs filtered by a specific country. This tool is optimized for analyzing threats targeting or originating from particular countries. Use FULL country names, not abbreviations.",
+      description: "**PREFERRED for country-specific IOC analysis**: Get IOCs filtered by a specific country. This tool is optimized for analyzing threats targeting or originating from particular countries. Use FULL country names, not abbreviations. Use 'get_iocs_page' tool to get more results when pagination is needed.",
       inputSchema: {
         country: z.string().describe("Country name for filtering IOCs. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**")
       }
@@ -93,7 +93,7 @@ export function registerIOCTools(
   server.registerTool(
     "get_iocs_by_threat_type",
     {
-      description: "Get IOCs filtered by a specific threat type. Use this tool to focus on particular types of threats from the available categories.",
+      description: "Get IOCs filtered by a specific threat type. Use this tool to focus on particular types of threats from the available categories. Use 'get_iocs_page' tool to get more results when pagination is needed.",
       inputSchema: {
         threatType: z.enum(["botnet_cc", "malware_download", "Malware", "Clean", "general", "Suspicious", "payload"]).describe("Threat type to filter by from available options")
       }

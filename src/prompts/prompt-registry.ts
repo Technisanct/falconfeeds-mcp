@@ -371,7 +371,7 @@ DETAILED ANALYSIS SECTIONS:
    - Incident correlation data analysis
    - Threat pattern focus areas and IOCs for analysis
 
-INTELLIGENCE SOURCES: Leverage search_threat_feeds_with_images for visual evidence, get_threat_feeds_by_category for 'Data Breach' and 'Data Leak' categories, and get_threat_actor_profile for attribution analysis. Cross-reference with IOC data for infrastructure intelligence.
+INTELLIGENCE SOURCES: Leverage get_threat_feeds_by_category for 'Data Breach' and 'Data Leak' categories, and get_threat_actor_profile for attribution analysis. Cross-reference with IOC data for infrastructure intelligence.
 
 OPERATIONAL SECURITY: Ensure proper handling of sensitive intelligence and maintain appropriate classification levels for darkweb-derived information.`
   },

@@ -59,7 +59,7 @@ class FalconFeedsMCPServer {
   private registerAllTools(): void {
     registerCVETools(this.server, this.cveService);
     registerThreatFeedTools(this.server, this.threatFeedService, this.threatActorService);
-    registerThreatActorTools(this.server, this.threatActorService);
+    registerThreatActorTools(this.server, this.threatActorService, this.threatFeedService);
     registerIOCTools(this.server, this.iocService);
   }
 
