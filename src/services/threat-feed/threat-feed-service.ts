@@ -10,10 +10,10 @@ import type {
 export interface IThreatFeedService {
   searchThreatFeeds(params?: ThreatFeedQueryParams): Promise<ThreatFeedResponse>;
   getThreatFeedById(uuid: string): Promise<ThreatFeedResponse>;
-  getThreatFeedsByActor(threatActorUUID: string): Promise<ThreatFeedResponse>;
-  getThreatFeedsByCategory(category: ThreatCategory): Promise<ThreatFeedResponse>;
-  searchThreatFeedsByKeyword(keyword: string): Promise<ThreatFeedResponse>;
-  getThreatFeedsByVictim(victimKey: VictimKey, victimValue: string): Promise<ThreatFeedResponse>;
+  getThreatFeedsByActor(threatActorUUID: string, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse>;
+  getThreatFeedsByCategory(category: ThreatCategory, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse>;
+  searchThreatFeedsByKeyword(keyword: string, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse>;
+  getThreatFeedsByVictim(victimKey: VictimKey, victimValue: string, publishedSince?: number, publishedTill?: number, category?: ThreatCategory): Promise<ThreatFeedResponse>;
   getNextPage(nextToken: string): Promise<ThreatFeedResponse>;
   getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
 }
@@ -29,20 +29,38 @@ export class ThreatFeedService implements IThreatFeedService {
     return this.apiClient.getThreatFeeds({ uuid });
   }
 
-  async getThreatFeedsByActor(threatActorUUID: string): Promise<ThreatFeedResponse> {
-    return this.apiClient.getThreatFeeds({ threatActorUUID });
+  async getThreatFeedsByActor(threatActorUUID: string, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse> {
+    return this.apiClient.getThreatFeeds({ 
+      threatActorUUID,
+      publishedSince,
+      publishedTill
+    });
   }
 
-  async getThreatFeedsByCategory(category: ThreatCategory): Promise<ThreatFeedResponse> {
-    return this.apiClient.getThreatFeeds({ category });
+  async getThreatFeedsByCategory(category: ThreatCategory, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse> {
+    return this.apiClient.getThreatFeeds({ 
+      category,
+      publishedSince,
+      publishedTill
+    });
   }
 
-  async searchThreatFeedsByKeyword(keyword: string): Promise<ThreatFeedResponse> {
-    return this.apiClient.getThreatFeeds({ keyword });
+  async searchThreatFeedsByKeyword(keyword: string, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse> {
+    return this.apiClient.getThreatFeeds({ 
+      keyword,
+      publishedSince,
+      publishedTill
+    });
   }
 
-  async getThreatFeedsByVictim(victimKey: VictimKey, victimValue: string): Promise<ThreatFeedResponse> {
-    return this.apiClient.getThreatFeeds({ victimKey, victimValue });
+  async getThreatFeedsByVictim(victimKey: VictimKey, victimValue: string, publishedSince?: number, publishedTill?: number, category?: ThreatCategory): Promise<ThreatFeedResponse> {
+    return this.apiClient.getThreatFeeds({ 
+      victimKey, 
+      victimValue,
+      publishedSince,
+      publishedTill,
+      category
+    });
   }
 
   async getNextPage(nextToken: string): Promise<ThreatFeedResponse> {
