@@ -42,7 +42,6 @@ Add the server to your MCP client configuration:
       ],
       "env": {
         "FALCONFEEDS_API_KEY": "your_api_key_here",
-        "FALCONFEEDS_TIMEOUT": "30000"
       }
     }
   }
@@ -110,6 +109,8 @@ Configure your MCP client:
 - **`search_threat_feeds_by_keyword`**: Search feeds using keywords
 - **`get_threat_feeds_by_organization`**: Get feeds targeting specific organizations
 - **`get_threat_feeds_by_domain`**: Get feeds targeting specific websites or domains
+- **`get_threat_feeds_by_country`**: Get feeds targeting victims from specific countries
+- **`get_threat_feeds_by_industry`**: Get feeds targeting specific industry sectors
 - **`get_next_threat_feed_page`**: Navigate through paginated results
 
 ### Threat Actor Operations
@@ -121,14 +122,14 @@ Configure your MCP client:
 
 ### IOC Operations
 - **`search_iocs`**: Search and analyze Indicators of Compromise
-- **`get_ioc_by_id`**: Retrieve specific IOC details
-- **`search_iocs_by_type`**: Filter IOCs by type (IP, domain, hash, etc.)
-- **`get_next_ioc_page`**: Navigate IOC result pagination
+- **`get_iocs_by_country`**: Get IOCs filtered by specific countries
+- **`get_iocs_by_threat_type`**: Filter IOCs by threat types (botnet_cc, malware_download, etc.)
+- **`get_iocs_page`**: Get specific pages of IOC results for pagination
 
 ### Threat Image Operations
-- **`get_threat_image_as_base64`**: Get images in base64 encoding
+- **`get_threat_image`**: Retrieve and display visual evidence from threat feed reports including screenshots, ransom notes, and leaked data samples
 
-## MCP Prompts
+## Prompt Templates
 
 The server provides cybersecurity-focused prompts designed for threat intelligence workflows:
 

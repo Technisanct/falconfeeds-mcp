@@ -415,3 +415,10 @@ export interface ThreatFeedQueryParams {
   victimValue?: string;
   includeImages?: boolean;
 } 
+
+export interface ThreatImageResponse {
+  message: string;
+  data: {
+    image: string; // Base64 encoded image data with MIME type prefix
+  };
+}
