@@ -3,7 +3,8 @@ import type {
   ThreatFeedResponse, 
   ThreatFeedQueryParams,
   ThreatCategory,
-  VictimKey
+  VictimKey,
+  ThreatImageResponse
 } from "../../types/index.js";
 
 export interface IThreatFeedService {
@@ -14,6 +15,7 @@ export interface IThreatFeedService {
   searchThreatFeedsByKeyword(keyword: string): Promise<ThreatFeedResponse>;
   getThreatFeedsByVictim(victimKey: VictimKey, victimValue: string): Promise<ThreatFeedResponse>;
   getNextPage(nextToken: string): Promise<ThreatFeedResponse>;
+  getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
 }
 
 export class ThreatFeedService implements IThreatFeedService {
@@ -45,5 +47,9 @@ export class ThreatFeedService implements IThreatFeedService {
 
   async getNextPage(nextToken: string): Promise<ThreatFeedResponse> {
     return this.apiClient.getThreatFeeds({ next: nextToken });
+  }
+
+  async getThreatImage(imageUuid: string): Promise<ThreatImageResponse> {
+    return this.apiClient.getThreatImage(imageUuid);
   }
 } 
