@@ -8,7 +8,7 @@ export interface IIOCService {
   searchIOCs(params?: IOCQueryParams): Promise<IOCResponse>;
   getIOCsByCountry(country: string): Promise<IOCResponse>;
   getIOCsByThreatType(threatType: string): Promise<IOCResponse>;
-  getIOCsPage(page: number): Promise<IOCResponse>;
+  getIOCsPage(params: IOCQueryParams): Promise<IOCResponse>;
 }
 
 export class IOCService implements IIOCService {
@@ -26,7 +26,7 @@ export class IOCService implements IIOCService {
     return this.apiClient.getIOCs({ threatType });
   }
 
-  async getIOCsPage(page: number): Promise<IOCResponse> {
-    return this.apiClient.getIOCs({ page });
+  async getIOCsPage(params: IOCQueryParams): Promise<IOCResponse> {
+    return this.apiClient.getIOCs(params);
   }
 } 

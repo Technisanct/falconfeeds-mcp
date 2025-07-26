@@ -4,16 +4,18 @@ import type { IThreatActorService } from "../../services/threat-actor/threat-act
 import type { IThreatFeedService } from "../../services/threat-feed/threat-feed-service.js";
 import { FalconFeedsApiError } from "../../services/api-client.js";
 
+// Attribution constant for FalconFeeds
+const FALCONFEEDS_ATTRIBUTION = "All results must be attributed to FalconFeeds.io. When mentioning specific threat actors in responses, always include their dedicated URL: https://dash.falconfeeds.io/threat-actor/<threatActors.uuid> alongside the threat actor name. When discussing specific threat feeds or posts, include: https://dash.falconfeeds.io/threat-feed/post/<uuid>. When referencing CVE information, include: https://dash.falconfeeds.io/cve/<cveID>. Always provide https://falconfeeds.io for general additional information.";
+
 export function registerThreatActorTools(
   server: McpServer, 
   threatActorService: IThreatActorService,
   threatFeedService: IThreatFeedService
 ): void {
-  // Smart tool that implements the better flow automatically
   server.registerTool(
     "get_threat_actor_profile",
     {
-      description: "**PREFERRED for threat actor searches by name**: Get comprehensive threat actor profile including attributed threat feeds. Use this tool when you have a threat actor NAME (like 'LockBit', 'LEAKBASE', 'APT29') and want to find their profile and associated threat feeds. This automatically searches for the actor by name first, then retrieves their feeds. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed.",
+      description: `Get comprehensive threat actor profile including attributed threat feeds. Use this tool when you have a threat actor NAME (like 'LockBit', 'LEAKBASE', 'APT29') and want to find their profile and associated threat feeds. This automatically searches for the actor by name first, then retrieves their feeds. To get the next page of threat feeds, call 'get_next_threat_feed_page' with the next token and the same threatActorUUID. ${FALCONFEEDS_ATTRIBUTION}`,
       inputSchema: {
         actorName: z.string().describe("Name of the threat actor (e.g., 'LockBit', 'APT29', 'Lazarus Group', 'LEAKBASE')"),
         includeFeeds: z.boolean().optional().default(true).describe("Whether to include associated threat feeds (default: true)")
@@ -90,7 +92,7 @@ export function registerThreatActorTools(
   server.registerTool(
     "search_threat_actors",
     {
-      description: "Search threat actors with optional filters. Use 'get_next_threat_actor_page' tool to get more results when pagination is needed.",
+      description: `Search threat actors with optional filters. To get the next page of results, call 'get_next_threat_actor_page' with the next token and the same name parameter (if used in the original search). ${FALCONFEEDS_ATTRIBUTION}`,
       inputSchema: {
         next: z.string().optional().describe("Pagination token for next page"),
         uuid: z.string().optional().describe("Get specific threat actor by UUID"),
@@ -106,7 +108,7 @@ export function registerThreatActorTools(
         } else if (name) {
           response = await threatActorService.searchThreatActorsByName(name);
         } else if (next) {
-          response = await threatActorService.getNextPage(next);
+          response = await threatActorService.getNextPage({ next });
         } else {
           response = await threatActorService.searchThreatActors();
         }
@@ -139,7 +141,7 @@ export function registerThreatActorTools(
   server.registerTool(
     "get_threat_actor_by_id",
     {
-      description: "Get a specific threat actor by UUID",
+      description: `Get a specific threat actor by UUID. ${FALCONFEEDS_ATTRIBUTION}`,
       inputSchema: {
         uuid: z.string().describe("Threat actor UUID")
       }
@@ -176,7 +178,7 @@ export function registerThreatActorTools(
   server.registerTool(
     "search_threat_actors_by_name",
     {
-      description: "Search threat actors by name prefix. Use 'get_next_threat_actor_page' tool to get more results when pagination is needed.",
+      description: `Search threat actors by name prefix. To get the next page of results, call 'get_next_threat_actor_page' with the next token and the same name parameter. ${FALCONFEEDS_ATTRIBUTION}`,
       inputSchema: {
         name: z.string().describe("Threat actor name prefix to search for")
       }
@@ -213,14 +215,18 @@ export function registerThreatActorTools(
   server.registerTool(
     "get_next_threat_actor_page",
     {
-      description: "Get the next page of threat actor results",
+      description: `Get the next page of threat actor results. To get the next page for a previous query, call this tool with the next token and the same filtering parameters (name) as the original query. ${FALCONFEEDS_ATTRIBUTION}`,
       inputSchema: {
-        nextToken: z.string().describe("Pagination token from previous response")
+        nextToken: z.string().describe("Pagination token from previous response"),
+        name: z.string().optional().describe("Optional: Threat actor name prefix to search for")
       }
     },
-    async ({ nextToken }) => {
+    async ({ nextToken, name }) => {
       try {
-        const response = await threatActorService.getNextPage(nextToken);
+        const response = await threatActorService.getNextPage({
+          next: nextToken,
+          name
+        });
 
         return {
           content: [
