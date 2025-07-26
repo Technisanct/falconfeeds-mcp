@@ -8,7 +8,7 @@ export interface IThreatActorService {
   searchThreatActors(params?: ThreatActorQueryParams): Promise<ThreatActorResponse>;
   getThreatActorById(uuid: string): Promise<ThreatActorResponse>;
   searchThreatActorsByName(name: string): Promise<ThreatActorResponse>;
-  getNextPage(nextToken: string): Promise<ThreatActorResponse>;
+  getNextPage(params: ThreatActorQueryParams): Promise<ThreatActorResponse>;
 }
 
 export class ThreatActorService implements IThreatActorService {
@@ -26,7 +26,7 @@ export class ThreatActorService implements IThreatActorService {
     return this.apiClient.getThreatActors({ name });
   }
 
-  async getNextPage(nextToken: string): Promise<ThreatActorResponse> {
-    return this.apiClient.getThreatActors({ next: nextToken });
+  async getNextPage(params: ThreatActorQueryParams): Promise<ThreatActorResponse> {
+    return this.apiClient.getThreatActors(params);
   }
 } 

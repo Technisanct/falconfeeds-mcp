@@ -11,10 +11,10 @@ export interface IThreatFeedService {
   searchThreatFeeds(params?: ThreatFeedQueryParams): Promise<ThreatFeedResponse>;
   getThreatFeedById(uuid: string): Promise<ThreatFeedResponse>;
   getThreatFeedsByActor(threatActorUUID: string, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse>;
-  getThreatFeedsByCategory(category: ThreatCategory, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse>;
+  getThreatFeedsByCategory(category: ThreatCategory, publishedSince?: number, publishedTill?: number, victimKey?: VictimKey, victimValue?: string): Promise<ThreatFeedResponse>;
   searchThreatFeedsByKeyword(keyword: string, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse>;
   getThreatFeedsByVictim(victimKey: VictimKey, victimValue: string, publishedSince?: number, publishedTill?: number, category?: ThreatCategory): Promise<ThreatFeedResponse>;
-  getNextPage(nextToken: string): Promise<ThreatFeedResponse>;
+  getNextPage(params: ThreatFeedQueryParams): Promise<ThreatFeedResponse>;
   getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
 }
 
@@ -37,11 +37,13 @@ export class ThreatFeedService implements IThreatFeedService {
     });
   }
 
-  async getThreatFeedsByCategory(category: ThreatCategory, publishedSince?: number, publishedTill?: number): Promise<ThreatFeedResponse> {
+  async getThreatFeedsByCategory(category: ThreatCategory, publishedSince?: number, publishedTill?: number, victimKey?: VictimKey, victimValue?: string): Promise<ThreatFeedResponse> {
     return this.apiClient.getThreatFeeds({ 
       category,
       publishedSince,
-      publishedTill
+      publishedTill,
+      victimKey,
+      victimValue
     });
   }
 
@@ -63,8 +65,8 @@ export class ThreatFeedService implements IThreatFeedService {
     });
   }
 
-  async getNextPage(nextToken: string): Promise<ThreatFeedResponse> {
-    return this.apiClient.getThreatFeeds({ next: nextToken });
+  async getNextPage(params: ThreatFeedQueryParams): Promise<ThreatFeedResponse> {
+    return this.apiClient.getThreatFeeds(params);
   }
 
   async getThreatImage(imageUuid: string): Promise<ThreatImageResponse> {
