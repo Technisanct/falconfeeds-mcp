@@ -89,14 +89,16 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_category",
     {
-      description: "Get threat feeds filtered by category. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
+      description: "Get threat feeds filtered by category. Supports time-based filtering with publishedSince and publishedTill parameters (in milliseconds). Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
       inputSchema: {
-        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).describe("Threat category to filter by")
+        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).describe("Threat category to filter by"),
+        publishedSince: z.number().optional().describe("Optional: Filter for feeds published on or after this timestamp (in milliseconds)"),
+        publishedTill: z.number().optional().describe("Optional: Filter for feeds published on or before this timestamp (in milliseconds)")
       }
     },
-    async ({ category }) => {
+    async ({ category, publishedSince, publishedTill }) => {
       try {
-        const response = await threatFeedService.getThreatFeedsByCategory(category as any);
+        const response = await threatFeedService.getThreatFeedsByCategory(category as any, publishedSince, publishedTill);
 
         return {
           content: [
@@ -126,14 +128,16 @@ export function registerThreatFeedTools(
   server.registerTool(
     "search_threat_feeds_by_keyword",
     {
-      description: "Perform full-text search on threat feed content and titles using keywords. Use this for general content searches, NOT for country names, industry names, or threat actor names (use their dedicated tools instead). Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
+      description: "Perform full-text search on threat feed content and titles using keywords. Supports time-based filtering with publishedSince and publishedTill parameters (in milliseconds). Use this for general content searches, NOT for country names, industry names, or threat actor names (use their dedicated tools instead). Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
       inputSchema: {
-        keyword: z.string().describe("Search keyword for full-text search in feed content (NOT for country/industry/actor names)")
+        keyword: z.string().describe("Search keyword for full-text search in feed content (NOT for country/industry/actor names)"),
+        publishedSince: z.number().optional().describe("Optional: Filter for feeds published on or after this timestamp (in milliseconds)"),
+        publishedTill: z.number().optional().describe("Optional: Filter for feeds published on or before this timestamp (in milliseconds)")
       }
     },
-    async ({ keyword }) => {
+    async ({ keyword, publishedSince, publishedTill }) => {
       try {
-        const response = await threatFeedService.searchThreatFeedsByKeyword(keyword);
+        const response = await threatFeedService.searchThreatFeedsByKeyword(keyword, publishedSince, publishedTill);
 
         return {
           content: [
@@ -163,14 +167,17 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_organization",
     {
-      description: "Get threat feeds filtered by organization name. Use this tool to find threats targeting specific companies or organizations. Use lowercase for organization names. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
+      description: "Get threat feeds filtered by organization name. Supports time-based filtering with publishedSince and publishedTill parameters (in milliseconds). Use this tool to find threats targeting specific companies or organizations. Use lowercase for organization names. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
       inputSchema: {
-        organization: z.string().describe("Organization name to search for (use lowercase)")
+        organization: z.string().describe("Organization name to search for (use lowercase)"),
+        publishedSince: z.number().optional().describe("Optional: Filter for feeds published on or after this timestamp (in milliseconds)"),
+        publishedTill: z.number().optional().describe("Optional: Filter for feeds published on or before this timestamp (in milliseconds)"),
+        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional: Filter by threat category")
       }
     },
-    async ({ organization }) => {
+    async ({ organization, publishedSince, publishedTill, category }) => {
       try {
-        const response = await threatFeedService.getThreatFeedsByVictim("Organization", organization);
+        const response = await threatFeedService.getThreatFeedsByVictim("Organization", organization, publishedSince, publishedTill, category as any);
 
         return {
           content: [
@@ -200,14 +207,17 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_domain",
     {
-      description: "Get threat feeds filtered by website or domain name. Use this tool to find threats targeting specific websites or domains. Use lowercase for domain names. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
+      description: "Get threat feeds filtered by website or domain name. Supports time-based filtering with publishedSince and publishedTill parameters (in milliseconds). Use this tool to find threats targeting specific websites or domains. Use lowercase for domain names. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
       inputSchema: {
-        domain: z.string().describe("domain name to search for (use lowercase. e.g. google.com, azure.com, etc.)")
+        domain: z.string().describe("domain name to search for (use lowercase. e.g. google.com, azure.com, etc.)"),
+        publishedSince: z.number().optional().describe("Optional: Filter for feeds published on or after this timestamp (in milliseconds)"),
+        publishedTill: z.number().optional().describe("Optional: Filter for feeds published on or before this timestamp (in milliseconds)"),
+        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional: Filter by threat category")
       }
     },
-    async ({ domain }) => {
+    async ({ domain, publishedSince, publishedTill, category }) => {
       try {
-        const response = await threatFeedService.getThreatFeedsByVictim("Site", domain);
+        const response = await threatFeedService.getThreatFeedsByVictim("Site", domain, publishedSince, publishedTill, category as any);
 
         return {
           content: [
@@ -237,14 +247,17 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_country",
     {
-      description: "**PREFERRED for country-based threat landscape**: Get threat feeds where victims are from a specific country. Use this tool when searching for threats by country (e.g., 'UAE', 'USA', 'Germany'). The country name must match exactly from the supported list. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
+      description: "**PREFERRED for country-based threat landscape**: Get threat feeds where victims are from a specific country. Supports time-based filtering with publishedSince and publishedTill parameters (in milliseconds). Use this tool when searching for threats by country (e.g., 'UAE', 'USA', 'Germany'). The country name must match exactly from the supported list. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
       inputSchema: {
-        country: z.enum(SUPPORTED_COUNTRIES as [Country, ...Country[]]).describe("Exact country name from the supported list (e.g., 'UAE', 'USA', 'Germany')")
+        country: z.enum(SUPPORTED_COUNTRIES as [Country, ...Country[]]).describe("Exact country name from the supported list (e.g., 'UAE', 'USA', 'Germany')"),
+        publishedSince: z.number().optional().describe("Optional: Filter for feeds published on or after this timestamp (in milliseconds)"),
+        publishedTill: z.number().optional().describe("Optional: Filter for feeds published on or before this timestamp (in milliseconds)"),
+        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional: Filter by threat category")
       }
     },
-    async ({ country }) => {
+    async ({ country, publishedSince, publishedTill, category }) => {
       try {
-        const response = await threatFeedService.getThreatFeedsByVictim("Country", country);
+        const response = await threatFeedService.getThreatFeedsByVictim("Country", country, publishedSince, publishedTill, category as any);
 
         return {
           content: [
@@ -274,14 +287,17 @@ export function registerThreatFeedTools(
   server.registerTool(
     "get_threat_feeds_by_industry",
     {
-      description: "Get threat feeds for a specific industry or sector. Use this tool when analyzing threats by industry (e.g., 'Healthcare & Pharmaceuticals', 'Financial Services', 'Government & Public Sector'). The industry name must match exactly from the supported list. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
+      description: "Get threat feeds for a specific industry or sector. Supports time-based filtering with publishedSince and publishedTill parameters (in milliseconds). Use this tool when analyzing threats by industry (e.g., 'Healthcare & Pharmaceuticals', 'Financial Services', 'Government & Public Sector'). The industry name must match exactly from the supported list. Use 'get_next_threat_feed_page' tool to get more results when pagination is needed. If you need visual evidence and the search results contain images, you can use the get_threat_image tool with the image UUIDs to retrieve the base64-encoded images",
       inputSchema: {
-        industry: z.enum(SUPPORTED_INDUSTRIES as any).describe("Exact industry name from the supported list (e.g., 'Healthcare & Pharmaceuticals', 'Financial Services')")
+        industry: z.enum(SUPPORTED_INDUSTRIES as any).describe("Exact industry name from the supported list (e.g., 'Healthcare & Pharmaceuticals', 'Financial Services')"),
+        publishedSince: z.number().optional().describe("Optional: Filter for feeds published on or after this timestamp (in milliseconds)"),
+        publishedTill: z.number().optional().describe("Optional: Filter for feeds published on or before this timestamp (in milliseconds)"),
+        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional: Filter by threat category")
       }
     },
-    async ({ industry }) => {
+    async ({ industry, publishedSince, publishedTill, category }) => {
       try {
-        const response = await threatFeedService.getThreatFeedsByVictim("Industry", industry);
+        const response = await threatFeedService.getThreatFeedsByVictim("Industry", industry, publishedSince, publishedTill, category as any);
 
         return {
           content: [

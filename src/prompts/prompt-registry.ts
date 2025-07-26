@@ -14,33 +14,82 @@ export interface PromptConfig {
 
 export const CYBERSECURITY_PROMPTS: PromptConfig[] = [
   {
-    name: "Cyber Security Threat Intelligence Report",
-    description: "Generate a comprehensive threat intelligence report for a threat actor, country, industry, or organization",
+    name: "Cyber Threat Intelligence Landscape",
+    description: "Compare the cyber threat landscape for a specific entity across two distinct time periods to identify evolving threats and security trends",
     arguments: [
       {
-        name: "Target",
-        description: "Name of the threat actor, country, industry, or organization to analyze",
-        required: true
+        name: "Subject",
+        description: "The entity to analyze (country, industry, or organization name)",
+        required: true,
       },
       {
-        name: "Time Period",
-        description: "Time period for analysis (e.g., 'last 30 days', 'Q1 2024')",
-        required: false
-      }
+        name: "Period 1",
+        description: "The first time period for comparison (e.g., 'Q1 2023', 'first half of 2023')",
+        required: true,
+      },
+      {
+        name: "Period 2",
+        description: "The second time period for comparison (e.g., 'Q2 2023', 'second half of 2023')",
+        required: true,
+      },
     ],
-    template: `Generate a comprehensive threat intelligence report for {{Target}}{{#Time Period}} covering {{Time Period}}{{/Time Period}}.
-      Include the following sections:
-      1. Executive Summary
-      2. Actor Profile and Attribution
-      3. Tactics, Techniques, and Procedures (TTPs)
-      4. Infrastructure Analysis
-      5. Target Analysis
-      6. Recent Activity Summary
-      7. Indicators of Compromise (IOCs)
-      8. Indicators and Patterns
-      9. Data Summary
-    
-    IMPORTANT: Use the get_threat_actor_profile tool first to get comprehensive actor information and attributed threat feeds. This ensures accurate attribution and the most relevant intelligence. Supplement with additional CVE and threat feed searches as needed. Provide threat data and indicators for analysis.`
+    template: `Conduct a comparative threat intelligence analysis for {{Subject}} between {{Period 1}} and {{Period 2}}.
+
+METHODOLOGY: Based on the subject type (Country, Industry, or Organization), use the appropriate FalconFeeds tools to gather relevant threat intelligence data for both time periods.
+
+EXECUTIVE SUMMARY:
+Provide a concise overview of the key findings, highlighting significant changes in the threat landscape between the two periods.
+
+DETAILED ANALYSIS SECTIONS:
+
+1. **Threat Activity Comparison**
+   - First, convert the time periods ({{Period 1}} and {{Period 2}}) to millisecond timestamps for use with API parameters
+   - Use the appropriate threat feed tool based on the subject type with publishedSince, publishedTill, and optional category parameters:
+     * For countries: 'get_threat_feeds_by_country' with country name, timestamp parameters, and optional category filter
+     * For industries: 'get_threat_feeds_by_industry' with industry name, timestamp parameters, and optional category filter
+     * For organizations: 'get_threat_feeds_by_organization' with organization name, timestamp parameters, and optional category filter
+   - Consider filtering by specific threat categories (e.g., "Ransomware", "Data Breach", "Malware") for more focused analysis
+   - Compare threat volumes, categories, and severity between periods
+   - Identify emerging and declining threat vectors
+   - Analyze changes in threat actor targeting preferences
+
+2. **Vulnerability Landscape Evolution**
+   - Use 'get_cves_by_date_range' to fetch CVEs for each period (using the same millisecond timestamps)
+   - Compare vulnerability types, severity distributions, and exploitation status
+   - Identify critical vulnerability trends and their implications
+   - Analyze patch availability and remediation timelines
+
+3. **Threat Actor Transformation**
+   - Identify key threat actors from the threat feed analysis
+   - Use 'get_threat_actor_profile' for these actors
+   - For each actor, analyze their activity in each period using the timestamp parameters
+   - Compare changes in TTPs, infrastructure, and capabilities
+   - Analyze shifts in motivation and targeting strategies
+   - Identify new threat actors and those no longer active
+
+4. **Attack Vector Analysis**
+   - Compare primary attack methodologies between periods
+   - Analyze changes in initial access techniques
+   - Identify evolving post-compromise behaviors
+   - Evaluate defensive control effectiveness against changing tactics
+
+5. **Indicators of Compromise Evolution**
+   - Use 'search_iocs' to identify IOC patterns in each period
+   - Compare infrastructure, malware, and command-and-control changes
+   - Analyze persistence mechanism evolution
+   - Identify detection evasion technique developments
+
+6. **Strategic Intelligence Assessment**
+   - Compare overall threat posture changes
+   - Analyze security implications for the subject
+   - Identify key risk factors and their evolution
+   - Provide strategic recommendations based on observed trends
+
+DATA LIMITATIONS: Acknowledge limitations in the comparative analysis, particularly regarding historical threat feed data availability and temporal coverage.
+
+INTELLIGENCE SOURCES: Clearly cite all FalconFeeds tools used for data collection and analysis throughout the report.
+
+PRESENTATION: Structure the output as a report to clearly distinguish between Period 1 and Period 2 data points, using tables or parallel sections where appropriate to highlight key differences.`
   },
   {
     name: "CVE Impact Assessment",

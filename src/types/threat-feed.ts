@@ -414,6 +414,8 @@ export interface ThreatFeedQueryParams {
   victimKey?: VictimKey;
   victimValue?: string;
   includeImages?: boolean;
+  publishedSince?: number; 
+  publishedTill?: number; 
 } 
 
 export interface ThreatImageResponse {
