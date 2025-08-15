@@ -525,16 +525,21 @@ OPERATIONAL CONSIDERATIONS: Maintain appropriate source protection and ensure co
   },
   {
     name: "IOC Analysis",
-    description: "Analyze Indicators of Compromise (IOCs) to assess threat levels, identify patterns, and support incident response.",
+    description: "Analyze Indicators of Compromise (IOCs) to assess threat levels, identify patterns, and support incident response. Supported threat types: Botnet Command & Control, Malware Download, Malware, Clean, General, Suspicious, Payload.",
     arguments: [
         {
             name: "Threat Type",
-            description: "Type of threat to analyze (e.g., 'Malware', 'botnet_cc', 'Suspicious').",
+            description: "Type of threat to analyze.",
             required: false,
         },
         {
-            name: "Country",
-            description: "Country to analyze for IOCs (e.g., 'United States', 'Germany'). Use full country names.",
+            name: "Target Country",
+            description: "Primary target country to analyze for IOCs.",
+            required: false,
+        },
+        {
+            name: "Source Country",
+            description: "Source country where threats originate from (e.g., 'Russia', 'China'). Use full country names.",
             required: false,
         },
         {
@@ -545,24 +550,64 @@ OPERATIONAL CONSIDERATIONS: Maintain appropriate source protection and ensure co
     ],
     template: `Conduct a comprehensive IOC analysis.
 
-INSTRUCTIONS:
-- Use the 'search_iocs' tool to get relevant IOCs. You can filter by 'Country' and/or 'Threat Type'.
-{{#Country}}
-- For a country-focused analysis, the 'get_iocs_by_country' tool is preferred for {{Country}}.
-{{/Country}}
+THREAT TYPE MAPPING:
 {{#Threat Type}}
-- For a threat-type-focused analysis, the 'get_iocs_by_threat_type' tool is preferred for '{{Threat Type}}'.
+- Convert user-friendly threat type to API format:
+  * "Botnet Command & Control" → "botnet_cc"
+  * "Malware Download" → "malware_download"
+  * "Malware" → "Malware"
+  * "Clean" → "Clean"
+  * "General" → "general"
+  * "Suspicious" → "Suspicious"
+  * "Payload" → "payload"
+- Use the converted value: {{Threat Type}}
 {{/Threat Type}}
 
-Based on the retrieved IOCs, provide a detailed report including:
-1.  **IOC Summary**: Summarize the IOCs, noting types (IPs, domains, hashes) and volume.
-2.  **Threat Context**: What kind of threats are these IOCs associated with? (e.g., malware campaigns, botnets).
-3.  **Geopolitical Context**: If country is specified, analyze any geopolitical patterns.
-4.  **Potential Impact**: What is the potential impact of these IOCs on an organization?
-5.  **Data Analysis**: Provide clear data points for detection patterns (e.g., SIEM query data, IDS signature patterns) and threat indicators (e.g., firewall rule data, host-based indicator patterns).
+INSTRUCTIONS:
+- Use the 'search_iocs' tool to get relevant IOCs. You can filter by 'Target Country', 'Source Country' and/or 'Threat Type'.
+{{#Target Country}}. Paginate using 'get_ioc_next_page' tool any number of times that is necessary to make analysis to get more and more results
+- For a target country-focused analysis, the 'get_iocs_by_country' tool is preferred for {{Target Country}}.
+{{/Target Country}} and check for threat actors targetting a country 'get_threat_feeds_by_country' and 'get_threat_feeds_by_actor etc.  and their activities and correlate the IOCs ased on time and known TTPs. Make analysis on Your known ttp information on threat actors
+{{#Source Country}}
+- For a source country analysis, use 'get_iocs_by_country' tool for {{Source Country}} to identify threats originating from this location.
+{{/Source Country}}
+{{#Threat Type}}
+- For a threat-type-focused analysis, the 'get_iocs_by_threat_type' tool is preferred. Convert the threat type as follows:
+  * If "{{Threat Type}}" = "Botnet Command & Control", use "botnet_cc"
+  * If "{{Threat Type}}" = "Malware Download", use "malware_download"
+  * If "{{Threat Type}}" = "General", use "general"
+  * Otherwise use "{{Threat Type}}" as-is (for Malware, Clean, Suspicious, Payload)
+{{/Threat Type}}
+
+Based on the retrieved IOCs, provide a comprehensive threat intelligence report including:
+
+1.  **IOC Summary**: Brief overview of the type of IOCs related to the given entity, Notable mentions and infromation on some of the IOCs.
 {{#Indicator}}
-6.  **Specific Analysis for {{Indicator}}**: Provide a detailed analysis for this specific indicator if found in the results.
+2.  **Specific Analysis for {{Indicator}}**: Provide a detailed analysis for this specific indicator if found in the results.
 {{/Indicator}}
+3.  **Threat Context**: What kind of threats are these IOCs associated with? Mention the IOCs with the threat incidents you analysed that could associate with the found IOCs(e.g., malware campaigns, botnets).
+
+4.  **Geopolitical Context**: 
+{{#Target Country}}   - Analyze threats targeting {{Target Country}} and their implications
+   - Identify threat actor groups known to target {{Target Country}}
+   - Assess regional threat landscape and attack vectors{{/Target Country}}
+{{#Source Country}}   - Analyze threats originating from {{Source Country}} and attribution patterns
+   - Examine state-sponsored or criminal group activities from {{Source Country}}{{/Source Country}}
+{{#Target Country}}{{#Source Country}}   - Compare threat flows between {{Source Country}} and {{Target Country}}
+   - Analyze bilateral cyber threat dynamics{{/Source Country}}{{/Target Country}}
+
+5.  **Threat Incidents Correlation**: 
+{{#Target Country}}   - Correlate IOCs with known security incidents targeting {{Target Country}}
+   - Identify patterns in attack timing, methods, and targets within {{Target Country}}
+   - Cross-reference with historical threat campaigns against {{Target Country}} infrastructure
+   - Assess if these IOCs match indicators from previous incidents in {{Target Country}}. Mention the IOC and its type.
+   - Evaluate potential for coordinated attacks or campaign continuity{{/Target Country}}
+
+6.  **Potential Impact**: What is the potential impact of these IOCs on an organization?
+
+7.  **Data Analysis**: Provide clear data points for detection patterns (e.g., SIEM query data, IDS signature patterns) and threat indicators (e.g., firewall rule data, host-based indicator patterns).
+
+8. **Important**: Never suggest mitigation actions, advices or recommendations
 `
   }
 ];
@@ -649,4 +694,4 @@ export function registerCybersecurityPrompts(server: McpServer): void {
       }
     );
   });
-} 
+}
