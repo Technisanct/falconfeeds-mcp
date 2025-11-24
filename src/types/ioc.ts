@@ -32,3 +32,49 @@ export interface IOCQueryParams {
   page?: number;
   threatType?: string;
 } 
+
+export interface FalconIOCQueryParams {
+  type?: string;
+  page?: number;
+  malwareUUID?: string;
+  threatActorUUID?: string;
+  confidence?: string;
+  keyword?: string;
+  uuid?: string;
+}
+
+export interface FalconIOCResponse {
+  message: string;
+  data: FalconIOC[];
+  next?: string;
+}
+
+export interface FalconIOC {
+  uuid: string;
+  type: string;
+  threatType: ThreatType[];
+  ttp: string[];
+  indicator: string;
+  threatActors: IOCThreatActor[];
+  malware: IOCMalware[];
+  victims: IOCVictim[];
+  createdAt: string;
+  updatedAt: string;
+  tags: string[];
+  confidence: string;
+}
+
+export interface IOCThreatActor {
+  uuid: string;
+  name: string;
+}
+
+export interface IOCMalware {
+  uuid: string;
+  name: string;
+}
+
+export interface IOCVictim {
+  uuid: string;
+  name: string;
+}

@@ -8,7 +8,9 @@ import type {
   ThreatActorQueryParams,
   IOCResponse,
   IOCQueryParams,
-  ThreatImageResponse
+  ThreatImageResponse,
+  FalconIOCResponse,
+  FalconIOCQueryParams
 } from "../types/index.js";
 import { isValidCountry, isValidIndustry, getIndustryValidationMessage } from "../utils/validation.js";
 
@@ -41,6 +43,7 @@ export interface IApiClient {
   getThreatActors(params?: ThreatActorQueryParams): Promise<ThreatActorResponse>;
   getIOCs(params?: IOCQueryParams): Promise<IOCResponse>;
   getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
+  getIOC(params?: FalconIOCQueryParams): Promise<FalconIOCResponse>;
 }
 
 export class FalconFeedsApiClient implements IApiClient {
@@ -143,6 +146,11 @@ export class FalconFeedsApiClient implements IApiClient {
     return this.makeRequest<IOCResponse>(API_CONFIG.ENDPOINTS.IOC, params);
   }
 
+  async getIOC(params?: FalconIOCQueryParams): Promise<FalconIOCResponse> {
+    this.validateFalconIOCParams(params);
+    return this.makeRequest<FalconIOCResponse>(API_CONFIG.ENDPOINTS.IOCV2, params);
+  }
+
   async getThreatImage(imageUuid: string): Promise<ThreatImageResponse> {
     if (!imageUuid) {
       throw new FalconFeedsApiError(
@@ -232,4 +240,17 @@ export class FalconFeedsApiClient implements IApiClient {
       );
     }
   }
+
+  private validateFalconIOCParams(params?: FalconIOCQueryParams): void {
+    if (!params) return;
+
+    if (params.page && params.page < 1) {
+      throw new FalconFeedsApiError(
+        "page must be at least 1",
+        400,
+        "invalid_parameter"
+      );
+    }
+  }
 } 
+
