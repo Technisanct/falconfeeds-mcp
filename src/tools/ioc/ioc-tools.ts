@@ -206,6 +206,7 @@ export function registerIOCTools(
       }
     }
   );
+
 server.registerTool(
   "get_iocs_by_malware_uuid",
   {
@@ -316,6 +317,7 @@ server.registerTool(
       }
   }
 );
+
 server.registerTool(
   "get_iocs_by_keyword",
   {
@@ -352,6 +354,7 @@ server.registerTool(
       }
   }
 );
+
 server.registerTool(
 "get_next_ioc_page",
 {
