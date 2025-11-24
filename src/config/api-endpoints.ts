@@ -5,6 +5,7 @@ export const API_CONFIG = {
     THREAT_FEED: "/threat/feed",
     THREAT_ACTOR: "/threat/actor",
     IOC: "/ioc",
+    IOCV2: "/ioc/v2",
     THREAT_IMAGE: "/threat/image"
   },
   LIMITS: {
@@ -46,6 +47,14 @@ export const ENDPOINT_REGISTRY: Record<string, EndpointConfig> = {
     description: "Retrieve Indicators of Compromise (IOCs)",
     requiresAuth: true
   },
+
+  GET_IOCS_V2: {
+    path: API_CONFIG.ENDPOINTS.IOCV2,
+    method: "GET",
+    description: "Retrieve Indicators of Compromise (IOCs) - Version 2",
+    requiresAuth: true
+  },
+  
   GET_THREAT_IMAGE: {
     path: API_CONFIG.ENDPOINTS.THREAT_IMAGE,
     method: "GET",
