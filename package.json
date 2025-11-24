@@ -8,7 +8,7 @@
     "threat-intel-mcp": "dist/index.js"
   },
   "scripts": {
-    "build": "npx",
+    "build": "tsc",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "clean": "rm -rf dist",
