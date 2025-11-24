@@ -93,7 +93,7 @@ export function registerIOCTools(
   server.registerTool(
     "get_iocs_by_threat_type",
     {
-      description: "Get IOCs filtered by a specific threat type. Use this tool to focus on particular types of threats from the available categories. To get the next page of results, call 'get_iocs_page' with the next page number and the same threatType parameter.",
+      description: "Get IOCs (Indicators of compromise) filtered by a specific threat type. Use this tool to focus on particular types of threats from the available categories. To get the next page of results, call 'get_iocs_page' with the next page number and the same threatType parameter.",
       inputSchema: {
         threatType: z.enum(["botnet_cc", "malware_download", "Malware", "Clean", "general", "Suspicious", "payload"]).describe("Threat type to filter by from available options")
       }
@@ -173,14 +173,15 @@ export function registerIOCTools(
   server.registerTool(
     "get_IOCs_by_type",
     {
-      description: "Get IOCs filtered by a specific type. Use this tool to focus on particular types from the available categories. To get the next page of results, call 'get_iocs_page' with the next page number and the same type parameter.",
+      description: "Get IOCs filtered by a specific type. Use this tool to get IOCs (Indicators of compromise) by different types (Refer the available types to know the types you can get IOCs).",
       inputSchema: {
-        type: z.enum(["ipv4", "ipv6", "ip:port", "domain", "url", "md5", "sha1", "sha256","sha3"]).describe("Type of IOC to retrieve")
+        type: z.enum(["ipv4", "ipv6", "ip:port", "domain", "url", "md5", "sha1", "sha256","sha3"]).describe("Type of IOC to retrieve"),
+        page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
       }
     },
-    async ({ type }) => {
+    async ({ type, page }) => {
       try {
-        const response = await iocService.getIOCByType({ type: type });
+        const response = await iocService.getIOCByType({ type: type, page: page });
 
         return {
           content: [
@@ -210,14 +211,15 @@ export function registerIOCTools(
 server.registerTool(
   "get_iocs_by_malware_uuid",
   {
-          description: `Get all IOCs associated with a specific malware by providing the malware's UUID.`,
+          description: `Get all IOCs (Indicators of compromise) associated with a specific malware. When you retrieve an IOC, its data may contain a 'malware' array. Each object in this array represents a piece of malware and includes a 'uuid'. You can use that UUID with this tool to find all other IOCs linked to the same malware.`,
           inputSchema: {
-              uuid: z.string().describe("The UUID of the malware to find associated IOCs for (e.g., 'MAL-Z70YOEPG7OP80T7Q')")
+              uuid: z.string().describe("The UUID of the malware to find associated IOCs for (e.g., 'MAL-Z70YOEPG7OP80T7Q')"),
+              page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
           }
   },
-  async ({ uuid }) => {
+  async ({ uuid, page }) => {
       try {
-          const response = await iocService.getIOCsByMalwareUUID(uuid);
+          const response = await iocService.getIOCsByMalwareUUID({ malwareUUID: uuid, page: page });
 
           return {
               content: [
@@ -245,16 +247,17 @@ server.registerTool(
 );
 
 server.registerTool(
-  "get_ioc_by_threatactor_uuid",
+  "get_ioc_by_threat_actor_uuid",
   {
-          description: `Get all IOCs associated with a specific threat actor by providing the threat actor's UUID.`,
+          description: `Get all IOCs (Indicators of compromise) associated with a specific threat actor. When you retrieve an IOC, its data may contain a 'threatActors' array. Each object in this array represents a threat actor and includes a 'uuid'. You can use that UUID with this tool to find all other IOCs linked to the same threat actor.`,
           inputSchema: {
-              uuid: z.string().describe("The UUID of the threat actor to find associated IOCs for (e.g., 'XTA-ALHBXKLRWMTB54VB')")
+              uuid: z.string().describe("The UUID of the threat actor to find associated IOCs for (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
+              page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
           }
   },
-  async ({ uuid }) => {
+  async ({ uuid, page}) => {
       try {
-          const response = await iocService.getIOCsByThreatActorUUID(uuid);
+          const response = await iocService.getIOCsByThreatActorUUID({ threatActorUUID: uuid, page: page });
 
           return {
               content: [
@@ -284,14 +287,15 @@ server.registerTool(
 server.registerTool(
   "get_iocs_by_confidence",
   {
-          description: `Get IOCs filtered by confidence level.`,
+          description: `Get IOCs(Indicators of compromise) filtered by confidence level.`,
           inputSchema: {
-              confidence: z.enum(["limited", "moderate", "elevated", "high", "other"]).describe("Confidence level to filter IOCs by (options: limited, moderate, elevated, high, other)")
+              confidence: z.enum(["limited", "moderate", "elevated", "high", "other"]).describe("Confidence level to filter IOCs by (options: limited, moderate, elevated, high, other)"),
+              page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
           }
   },
-  async ({ confidence }) => {
+  async ({ confidence, page }) => {
       try {
-          const response = await iocService.getIOCsByConfidence(confidence as ThreatType);
+          const response = await iocService.getIOCsByConfidence({ confidence, page });
 
           return {
               content: [
@@ -321,14 +325,15 @@ server.registerTool(
 server.registerTool(
   "get_iocs_by_keyword",
   {
-          description: `Get IOCs filtered by a specific keyword. The keyword will be searched for in the IOC's tags, threat actor names, and malware display names.`,
+          description: `Get IOCs (Indicators of Compromise) filtered by a specific keyword. The keyword is searched against various fields within the IOC, such as the indicator's value and its associated tags, to find all relevant results.`,
           inputSchema: {
                     keyword: z.string().describe("Search IoCs by keyword present in tags, threat actor names, or malware display names."),
+                    page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
           }
   },
-  async ({ keyword }) => {
+  async ({ keyword, page }) => {
       try {
-          const response = await iocService.getIOCsByKeyword(keyword);
+          const response = await iocService.getIOCsByKeyword({ keyword, page });
 
           return {
               content: [
@@ -358,7 +363,7 @@ server.registerTool(
 server.registerTool(
 "get_next_ioc_page",
 {
-  description: "Get the next page of IOC results for a previous query. To get the next page for a previous query, call this tool with the next page number and the same filtering parameters (country, threatType) as the original query. Each request returns up to 100 IOCs.",
+  description: "Get the next page of IOC (Indicators of Compromise) results for a previous query. To get the next page for a previous query, call this tool with the next page number and the same filtering parameters (country, threatType) as the original query. Each request returns up to 100 IOCs.",
   inputSchema:{
     page: z.number().min(1).describe("Page number to retrieve (starts from 1)"),
     country: z.string().optional().describe("Optional: Country name for filtering IOCs. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),

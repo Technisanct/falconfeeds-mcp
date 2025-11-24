@@ -12,10 +12,10 @@ export interface IIOCService {
   getIOCsByThreatType(threatType: string): Promise<IOCResponse>;
   getIOCsPage(params: IOCQueryParams): Promise<IOCResponse>;
   getIOCByType(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
-  getIOCsByMalwareUUID(uuid: string): Promise<FalconIOCResponse>;
-  getIOCsByThreatActorUUID(uuid: string): Promise<FalconIOCResponse>;
-  getIOCsByConfidence(confidence: string): Promise<FalconIOCResponse>;
-  getIOCsByKeyword(keyword: string): Promise<FalconIOCResponse>;
+  getIOCsByMalwareUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
+  getIOCsByThreatActorUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
+  getIOCsByConfidence(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
+  getIOCsByKeyword(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
   getIOCsByPage(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
 }
 
@@ -42,20 +42,20 @@ export class IOCService implements IIOCService {
     return this.apiClient.getIOC(params);
   }
 
-  async getIOCsByMalwareUUID(uuid: string): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC({ malwareUUID: uuid });
+  async getIOCsByMalwareUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
+    return this.apiClient.getIOC(params);
   }
 
-  async getIOCsByThreatActorUUID(uuid: string): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC({ threatActorUUID: uuid });
+  async getIOCsByThreatActorUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
+    return this.apiClient.getIOC(params);
   }
 
-  async getIOCsByConfidence(confidence: string): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC({ confidence: confidence });
+  async getIOCsByConfidence(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
+    return this.apiClient.getIOC(params);
   }
 
-  async getIOCsByKeyword(keyword: string): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC({ keyword: keyword });
+  async getIOCsByKeyword(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
+    return this.apiClient.getIOC(params);
   }
 
   async getIOCsByPage(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {

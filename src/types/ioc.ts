@@ -40,6 +40,7 @@ export interface FalconIOCQueryParams {
   threatActorUUID?: string;
   confidence?: string;
   keyword?: string;
+  uuid?: string;
 }
 
 export interface FalconIOCResponse {
