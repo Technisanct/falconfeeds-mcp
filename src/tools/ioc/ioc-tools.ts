@@ -178,7 +178,7 @@ export function registerIOCTools(
   );
 
 server.registerTool(
-  "get_IOCs_by_filters",
+  "List_IOCs_By_Filters",
   {
     description: `Search Indicators of Compromise (IOCs) using a flexible combination of optional filters. This is the primary tool for any query involving multiple criteria, including pagination. You can filter by type, malware UUID, threat actor UUID, confidence,and keyword ${FALCONFEEDS_ATTRIBUTION}`,
     inputSchema: {
