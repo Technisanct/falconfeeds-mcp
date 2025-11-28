@@ -180,12 +180,12 @@ export function registerIOCTools(
 server.registerTool(
   "List_IOCs_By_Filters",
   {
-    description: `Search Indicators of Compromise (IOCs) using a flexible combination of optional filters. This is the primary tool for any query involving multiple criteria, including pagination. You can filter by type, malware UUID, threat actor UUID, confidence,and keyword ${FALCONFEEDS_ATTRIBUTION}`,
+    description: `Get Indicators of Compromise (IOCs) using a flexible set of optional filters. This tool allows you to filtered by malware using malwareUUID, threat actor using threatActorUUID, type, confidence and keyword. Pagination is required for every request, and the page parameter must always be included when retrieving results or fetching additional pages. Refer to the input schema for valid values. ${FALCONFEEDS_ATTRIBUTION}`,
     inputSchema: {
       type: z.enum(["ipv4", "ipv6", "ip:port", "domain", "url", "md5", "sha1", "sha256","sha3"]).optional().describe("Optional: A list of IOC types to retrieve (e.g., ['ipv4', 'url'])"),
       malwareUUID:  z.string().optional().describe("The UUID of the malware to find associated IOCs for (e.g., 'MAL-Z70YOEPG7OP80T7Q')"),
       threatActorUUID: z.string().optional().describe("The UUID of the threat actor to find associated IOCs for (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
-      confidence: z.enum(["limited", "moderate", "elevated", "high", "other"]).optional().describe("Confidence level to filter IOCs by (options: limited, moderate, elevated, high, other)"),
+      confidence: z.enum(["limited", "moderate", "elevated", "high", "other"]).optional().describe("Optional: The confidence level to filter IOCs by. For example, to get high confidence IOCs, use 'high'."),
       keyword: z.string().optional().describe("Optional: Search IOCs (Indicators of Compromise) filtered by a specific keyword. The keyword is searched against various fields within the IOC, such as the indicator's value and its associated tags, to find all relevant results."),
       page: z.number().min(1).optional().describe("Optional: Page number for pagination (starts from 1)"),
     }
