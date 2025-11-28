@@ -11,12 +11,7 @@ export interface IIOCService {
   getIOCsByCountry(country: string): Promise<IOCResponse>;
   getIOCsByThreatType(threatType: string): Promise<IOCResponse>;
   getIOCsPage(params: IOCQueryParams): Promise<IOCResponse>;
-  getIOCByType(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
-  getIOCsByMalwareUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
-  getIOCsByThreatActorUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
-  getIOCsByConfidence(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
-  getIOCsByKeyword(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
-  getIOCsByPage(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
+  getIOCsByFilters(params:FalconIOCQueryParams):Promise<FalconIOCResponse>;
 }
 
 export class IOCService implements IIOCService {
@@ -38,27 +33,7 @@ export class IOCService implements IIOCService {
     return this.apiClient.getIOCs(params);
   }
 
-  async getIOCByType(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC(params);
-  }
-
-  async getIOCsByMalwareUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC(params);
-  }
-
-  async getIOCsByThreatActorUUID(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC(params);
-  }
-
-  async getIOCsByConfidence(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC(params);
-  }
-
-  async getIOCsByKeyword(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
-    return this.apiClient.getIOC(params);
-  }
-
-  async getIOCsByPage(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
+  async getIOCsByFilters(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
     return this.apiClient.getIOC(params);
   }
 }
