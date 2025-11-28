@@ -177,237 +177,48 @@ export function registerIOCTools(
     }
   );
 
-  server.registerTool(
-    "get_IOCs_by_type",
-    {
-      description: `Get IOCs filtered by a specific type. Use this tool to get IOCs (Indicators of compromise) by different types (Refer the available types to know the types you can get IOCs). ${FALCONFEEDS_ATTRIBUTION}`,
-      inputSchema: {
-        type: z.enum(["ipv4", "ipv6", "ip:port", "domain", "url", "md5", "sha1", "sha256","sha3"]).describe("Type of IOC to retrieve"),
-        page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
-      }
-    },
-    async ({ type, page }) => {
-      try {
-        const response = await iocService.getIOCByType({ type: type, page: page });
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(response, null, 2)
-            }
-          ]
-        };
-      } catch (error) {
-        if (error instanceof FalconFeedsApiError) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
-              }
-            ],
-            isError: true
-          };
-        }
-        throw error;
-      }
+server.registerTool(
+  "List_IOCs_By_Filters",
+  {
+    description: `Get all IOCs (Indicators of Compromise) using a flexible set of optional filters. This tool allows you to filtered by malware using malwareUUID, threat actor using threatActorUUID, type, confidence and keyword. Pagination is required for every request, and the page parameter must always be included when retrieving results or fetching additional pages. Refer to the input schema for valid values. ${FALCONFEEDS_ATTRIBUTION}`,
+    inputSchema: {
+      type: z.enum(["ipv4", "ipv6", "ip:port", "domain", "url", "md5", "sha1", "sha256","sha3"]).optional().describe("Optional: A list of IOC types to retrieve (e.g., ['ipv4', 'url'])"),
+      malwareUUID:  z.string().optional().describe("The UUID of the malware to find associated IOCs for (e.g., 'MAL-Z70YOEPG7OP80T7Q')"),
+      threatActorUUID: z.string().optional().describe("The UUID of the threat actor to find associated IOCs for (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
+      confidence: z.enum(["limited", "moderate", "elevated", "high", "other"]).optional().describe("Optional: The confidence level to filter IOCs by. For example, to get high confidence IOCs, use 'high'."),
+      keyword: z.string().optional().describe("Optional: Search IOCs (Indicators of Compromise) filtered by a specific keyword. The keyword is searched against various fields within the IOC, such as the indicator's value and its associated tags, to find all relevant results."),
+      page: z.number().min(1).optional().describe("Optional: Page number for pagination (starts from 1)"),
     }
-  );
-
-server.registerTool(
-  "get_iocs_by_malware_uuid",
-  {
-          description: `Get all IOCs (Indicators of compromise) associated with a specific malware. When you retrieve an IOC, its data may contain a 'malware' array. Each object in this array represents a piece of malware and includes a 'uuid'. You can use that UUID with this tool to find all other IOCs linked to the same malware. ${FALCONFEEDS_ATTRIBUTION}`,
-          inputSchema: {
-              uuid: z.string().describe("The UUID of the malware to find associated IOCs for (e.g., 'MAL-Z70YOEPG7OP80T7Q')"),
-              page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
-          }
   },
-  async ({ uuid, page }) => {
-      try {
-          const response = await iocService.getIOCsByMalwareUUID({ malwareUUID: uuid, page: page });
+  async (params) => {
+    try {
+      const response = await iocService.getIOCsByFilters(params);
 
-          return {
-              content: [
-                  {
-                      type: "text",
-                      text: JSON.stringify(response, null, 2)
-                  }
-              ]
-          };
-      } catch (error) {
-          if (error instanceof FalconFeedsApiError) {
-              return {
-                  content: [
-                      {
-                          type: "text",
-                          text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
-                      }
-                  ],
-                  isError: true
-              };
-          }
-          throw error;
-      }
-  }
-);
-
-server.registerTool(
-  "get_ioc_by_threat_actor_uuid",
-  {
-          description: `Get all IOCs (Indicators of compromise) associated with a specific threat actor. When you retrieve an IOC, its data may contain a 'threatActors' array. Each object in this array represents a threat actor and includes a 'uuid'. You can use that UUID with this tool to find all other IOCs linked to the same threat actor. ${FALCONFEEDS_ATTRIBUTION}`,
-          inputSchema: {
-              uuid: z.string().describe("The UUID of the threat actor to find associated IOCs for (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
-              page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
-          }
-  },
-  async ({ uuid, page}) => {
-      try {
-          const response = await iocService.getIOCsByThreatActorUUID({ threatActorUUID: uuid, page: page });
-
-          return {
-              content: [
-                  {
-                      type: "text",
-                      text: JSON.stringify(response, null, 2)
-                  }
-              ]
-          };
-      } catch (error) {
-          if (error instanceof FalconFeedsApiError) {
-              return {
-                  content: [
-                      {
-                          type: "text",
-                          text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
-                      }
-                  ],
-                  isError: true
-              };
-          }
-          throw error;
-      }
-  }
-);
-
-server.registerTool(
-  "get_iocs_by_confidence",
-  {
-          description: `Get IOCs(Indicators of compromise) filtered by confidence level. ${FALCONFEEDS_ATTRIBUTION}`,
-          inputSchema: {
-              confidence: z.enum(["limited", "moderate", "elevated", "high", "other"]).describe("Confidence level to filter IOCs by (options: limited, moderate, elevated, high, other)"),
-              page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
-          }
-  },
-  async ({ confidence, page }) => {
-      try {
-          const response = await iocService.getIOCsByConfidence({ confidence, page });
-
-          return {
-              content: [
-                  {
-                      type: "text",
-                      text: JSON.stringify(response, null, 2)
-                  }
-              ]
-          };
-      } catch (error) {
-          if (error instanceof FalconFeedsApiError) {
-              return {
-                  content: [
-                      {
-                          type: "text",
-                          text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
-                      }
-                  ],
-                  isError: true
-              };
-          }
-          throw error;
-      }
-  }
-);
-
-server.registerTool(
-  "get_iocs_by_keyword",
-  {
-          description: `Get IOCs (Indicators of Compromise) filtered by a specific keyword. The keyword is searched against various fields within the IOC, such as the indicator's value and its associated tags, to find all relevant results. ${FALCONFEEDS_ATTRIBUTION}`,
-          inputSchema: {
-                    keyword: z.string().describe("Search IoCs by keyword present in tags, threat actor names, or malware display names."),
-                    page: z.number().min(1).optional().describe("Optional page number for pagination (starts from 1)")
-          }
-  },
-  async ({ keyword, page }) => {
-      try {
-          const response = await iocService.getIOCsByKeyword({ keyword, page });
-
-          return {
-              content: [
-                  {
-                      type: "text",
-                      text: JSON.stringify(response, null, 2)
-                  }
-              ]
-          };
-      } catch (error) {
-          if (error instanceof FalconFeedsApiError) {
-              return {
-                  content: [
-                      {
-                          type: "text",
-                          text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
-                      }
-                  ],
-                  isError: true
-              };
-          }
-          throw error;
-      }
-  }
-);
-
-server.registerTool(
-"get_next_ioc_page",
-{
-  description: `Get the next page of IOC (Indicators of Compromise) results for a previous query. To get the next page for a previous query, call this tool with the next page number and the same filtering parameters (country, threatType) as the original query. Each request returns up to 100 IOCs. ${FALCONFEEDS_ATTRIBUTION}`,
-  inputSchema:{
-    page: z.number().min(1).describe("Page number to retrieve (starts from 1)"),
-    country: z.string().optional().describe("Optional: Country name for filtering IOCs. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),
-    threatType: z.enum(["botnet_cc", "malware_download", "Malware", "Clean", "general", "Suspicious", "payload"]).optional().describe("Optional: Filter by threat type")
-  }
-},
-async ({ page, country, threatType }) => {
-  try {
-    const response = await iocService.getIOCsPage({
-      page,
-      country,
-      threatType
-    });
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(response, null, 2)
-        }
-      ]
-    };
-  } catch (error) {
-    if (error instanceof FalconFeedsApiError) {
       return {
         content: [
           {
             type: "text",
-            text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
+            text: JSON.stringify(response, null, 2)
           }
-        ],
-        isError: true
+        ]
       };
+    } catch (error) {
+      if (error instanceof FalconFeedsApiError) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
+            }
+          ],
+          tool: {
+            parameters: params
+          },
+          isError: true
+        };
+      }
+      throw error;
     }
-    throw error;
   }
-}
 );
-
 }
