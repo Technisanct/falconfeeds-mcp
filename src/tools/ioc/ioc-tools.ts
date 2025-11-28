@@ -180,7 +180,7 @@ export function registerIOCTools(
 server.registerTool(
   "List_IOCs_By_Filters",
   {
-    description: `Get Indicators of Compromise (IOCs) using a flexible set of optional filters. This tool allows you to filtered by malware using malwareUUID, threat actor using threatActorUUID, type, confidence and keyword. Pagination is required for every request, and the page parameter must always be included when retrieving results or fetching additional pages. Refer to the input schema for valid values. ${FALCONFEEDS_ATTRIBUTION}`,
+    description: `Get all IOCs (Indicators of Compromise) using a flexible set of optional filters. This tool allows you to filtered by malware using malwareUUID, threat actor using threatActorUUID, type, confidence and keyword. Pagination is required for every request, and the page parameter must always be included when retrieving results or fetching additional pages. Refer to the input schema for valid values. ${FALCONFEEDS_ATTRIBUTION}`,
     inputSchema: {
       type: z.enum(["ipv4", "ipv6", "ip:port", "domain", "url", "md5", "sha1", "sha256","sha3"]).optional().describe("Optional: A list of IOC types to retrieve (e.g., ['ipv4', 'url'])"),
       malwareUUID:  z.string().optional().describe("The UUID of the malware to find associated IOCs for (e.g., 'MAL-Z70YOEPG7OP80T7Q')"),
