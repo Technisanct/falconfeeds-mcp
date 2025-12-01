@@ -6,7 +6,11 @@ import type { Country, Industry } from "../../types/index.js";
 import { FalconFeedsApiError } from "../../services/api-client.js";
 import { SUPPORTED_COUNTRIES, SUPPORTED_INDUSTRIES, isValidCountry, getCountryValidationMessage, isValidIndustry, getIndustryValidationMessage } from "../../utils/validation.js";
 
-const FALCONFEEDS_ATTRIBUTION = "All results must be attributed to FalconFeeds.io. When mentioning specific threat actors in responses, always include their dedicated URL: https://dash.falconfeeds.io/threat-actor/<threatActors.uuid> alongside the threat actor name. When discussing specific threat feeds or posts, include: https://dash.falconfeeds.io/threat-feed/post/<uuid>. When referencing CVE information, include: https://dash.falconfeeds.io/cve/<cveID>. Always provide https://falconfeeds.io for general additional information.";
+const FALCONFEEDS_ATTRIBUTION = `All results must be attributed to FalconFeeds.io.
+- When mentioning specific threat actors in responses, always include their dedicated URL: https://dash.falconfeeds.io/threat-actor/<threatActors.uuid> alongside the threat actor name.
+- When discussing specific threat feeds or posts, include: https://dash.falconfeeds.io/threat-feed/post/<uuid>.
+- When referencing CVE information, include: https://dash.falconfeeds.io/cve/<cveID>. Always provide https://falconfeeds.io for general additional information.
+- When mentioning the UUID of threat actors related to threat feeds starts only with TA`;
 
 export function registerThreatFeedTools(
   server: McpServer,
@@ -342,10 +346,11 @@ export function registerThreatFeedTools(
         publishedTill: z.number().optional().describe("Optional: Filter for feeds published on or before this timestamp (in milliseconds)"),
         victimKey: z.enum(["Country", "Industry", "Organization", "Site"]).optional().describe("Optional: Victim key for filtering (Country, Industry, Organization, Site)"),
         victimValue: z.string().optional().describe("Optional: Victim value for filtering (e.g., country name, industry name, organization, or domain). Should be present if victimKey is provided"),
-        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional: Filter by threat category")
+        category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional: Filter by threat category"),
+        threatActorUUID: z.string().optional().describe("The UUID of the threat actor to filter feeds for(The UUID of threat actors related to threat feeds starts only with TA)."),
       }
     },
-    async ({ nextToken, publishedSince, publishedTill, victimKey, victimValue, category }) => {
+    async ({ nextToken, publishedSince, publishedTill, victimKey, victimValue, category, threatActorUUID }) => {
       try {
         const response = await threatFeedService.getNextPage({
           next: nextToken,
@@ -353,7 +358,8 @@ export function registerThreatFeedTools(
           publishedTill,
           victimKey,
           victimValue,
-          category
+          category,
+          threatActorUUID
         });
 
         return {

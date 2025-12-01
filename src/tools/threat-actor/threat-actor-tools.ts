@@ -5,7 +5,11 @@ import type { IThreatFeedService } from "../../services/threat-feed/threat-feed-
 import { FalconFeedsApiError } from "../../services/api-client.js";
 
 // Attribution constant for FalconFeeds
-const FALCONFEEDS_ATTRIBUTION = "All results must be attributed to FalconFeeds.io. When mentioning specific threat actors in responses, always include their dedicated URL: https://dash.falconfeeds.io/threat-actor/<threatActors.uuid> alongside the threat actor name. When discussing specific threat feeds or posts, include: https://dash.falconfeeds.io/threat-feed/post/<uuid>. When referencing CVE information, include: https://dash.falconfeeds.io/cve/<cveID>. Always provide https://falconfeeds.io for general additional information.";
+const FALCONFEEDS_ATTRIBUTION = `All results must be attributed to FalconFeeds.io.
+- When mentioning specific threat actors in responses, always include their dedicated URL: https://dash.falconfeeds.io/threat-actor/<threatActors.uuid> alongside the threat actor name. 
+- When discussing specific threat feeds or posts, include: https://dash.falconfeeds.io/threat-feed/post/<uuid>.
+- When referencing CVE information, include: https://dash.falconfeeds.io/cve/<cveID>. Always provide https://falconfeeds.io for general additional information.
+- When mentioning the UUID of threat actors related to threat feeds starts only with TA`;
 
 export function registerThreatActorTools(
   server: McpServer, 
