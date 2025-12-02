@@ -244,13 +244,12 @@ export class FalconFeedsApiClient implements IApiClient {
   private validateFalconIOCParams(params?: FalconIOCQueryParams): void {
     if (!params) return;
 
-    if (params.page && params.page < 1) {
+    if (params.next !== undefined && params.next === "") {
       throw new FalconFeedsApiError(
-        "page must be at least 1",
+        "The 'next' token cannot be an empty string.",
         400,
         "invalid_parameter"
       );
     }
   }
 } 
-

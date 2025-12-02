@@ -35,7 +35,7 @@ export interface IOCQueryParams {
 
 export interface FalconIOCQueryParams {
   type?: string;
-  page?: number;
+  next?: string;
   malwareUUID?: string;
   threatActorUUID?: string;
   confidence?: string;
