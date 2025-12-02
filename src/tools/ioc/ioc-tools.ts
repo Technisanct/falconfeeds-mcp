@@ -233,7 +233,7 @@ server.registerTool(
       after: z.string().optional().describe("Optional: The 'next' token for pagination to retrieve subsequent pages of results."),
       name: z.string().optional().describe("Optional: Name of the IOC to find associated threat actors for (e.g., 'EvilCorp IOC')"),
       country: z.string().optional().describe("Optional: Country name associated with the IOC. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),
-      SortBy: z.enum(["name", "first_seen", "last_seen"]).optional().describe("Optional: Field to sort the threat actors by. Valid values are 'name', 'first_seen', and 'last_seen'."),
+      SortBy: z.enum(["iocCount", "malwareCount", "lastSeen"]).optional().describe("Optional: Field to sort the threat actors by. Valid values are 'iocCount', 'malwareCount', and 'lastSeen'."),
       SortOrder: z.enum(["asc", "desc"]).optional().describe("Optional: Order to sort the threat actors. Valid values are 'asc' for ascending and 'desc' for descending.")
     }
   },
