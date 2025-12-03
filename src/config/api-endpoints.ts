@@ -66,7 +66,7 @@ export const ENDPOINT_REGISTRY: Record<string, EndpointConfig> = {
   GET_IOC_THREAT_ACTORS: {
     path: API_CONFIG.ENDPOINTS.IOC_THREAT_ACTOR,
     method: "GET",
-    description: "Retrieve IOCs associated with threat actors",
+    description: "Retrieve threat actors related to IOCs",
     requiresAuth: true
   }
 

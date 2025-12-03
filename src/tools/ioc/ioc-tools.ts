@@ -225,14 +225,14 @@ server.registerTool(
 );
 
 server.registerTool(
-  "Get_iocs_threat_actors",
+  "Get_IOC_threat_actors",
   {
     description: `Get a list of threat actors. You can optionally filter by threat actor UUID, name, or country. This tool retrieves detailed information about threat actors. ${FALCONFEEDS_ATTRIBUTION}`,
      inputSchema: {
       uuid: z.string().optional().describe("Optional: The UUID of the threat actor to retrieve. (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
       next: z.string().optional().describe("Optional: The 'next' token for pagination to retrieve subsequent pages of results."),
       name: z.string().optional().describe("Optional: Name of the threat actor to filter by (e.g., 'EvilCorp')"),
-      country: z.string().optional().describe("Optional: Country name associated with the threat actor. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),
+      country: z.string().optional().describe("Optional: Country name associated with the threat actor."),
       sortBy: z.enum(["iocCount", "malwareCount", "lastSeen"]).optional().describe(" Field to sort the threat actors by. Valid values are 'iocCount', 'malwareCount', and 'lastSeen'."),
       sortOrder: z.enum(["asc", "desc"]).optional().describe("Order to sort the threat actors. Valid values are 'asc' for ascending and 'desc' for descending.")
     }
