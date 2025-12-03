@@ -3,7 +3,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { IIOCService } from "../../services/ioc/ioc-service.js";
 import type { ThreatType } from "../../types/index.js";
 import { FalconFeedsApiError } from "../../services/api-client.js";
- import { encode } from '@toon-format/toon'
+import { encode } from '@toon-format/toon'
 
 const FALCONFEEDS_ATTRIBUTION = `All results must be attributed to FalconFeeds.io. Follow these specific formatting rules:
 - When mentioning a specific threat actor, include their name and dedicated URL. For example: "Threat Actor: EvilCorp (https://dash.falconfeeds.io/threat-actor/TA-76B48968823E8BCB)"
@@ -223,4 +223,46 @@ server.registerTool(
     }
   }
 );
-}
+
+server.registerTool(
+  "Get_IOC_threat_actors",
+  {
+    description: `Get a list of threat actors. You can optionally filter by threat actor UUID, name, or country. This tool retrieves detailed information about threat actors. ${FALCONFEEDS_ATTRIBUTION}`,
+     inputSchema: {
+      uuid: z.string().optional().describe("Optional: The UUID of the threat actor to retrieve. (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
+      next: z.string().optional().describe("Optional: The 'next' token for pagination to retrieve subsequent pages of results."),
+      name: z.string().optional().describe("Optional: Name of the threat actor to filter by (e.g., 'EvilCorp')"),
+      country: z.string().optional().describe("Optional: Country name associated with the threat actor."),
+      sortBy: z.enum(["iocCount", "malwareCount", "lastSeen"]).optional().describe(" Field to sort the threat actors by. Valid values are 'iocCount', 'malwareCount', and 'lastSeen'."),
+      sortOrder: z.enum(["asc", "desc"]).optional().describe("Order to sort the threat actors. Valid values are 'asc' for ascending and 'desc' for descending.")
+    }
+  },
+  async (params) => {
+    try {
+      const response = await iocService.getIOCsThreatActors(params as any);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: encode(response)
+          }
+        ]
+      };
+    } catch (error) {
+      if (error instanceof FalconFeedsApiError) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${error.message} (Status: ${error.status}, Code: ${error.code})`
+            }
+          ],
+          isError: true
+        };
+      }
+      throw error;
+    }
+  }
+);
+} 

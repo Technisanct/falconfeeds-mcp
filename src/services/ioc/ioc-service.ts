@@ -3,7 +3,8 @@ import type {
   IOCResponse, 
   IOCQueryParams,
   FalconIOCResponse,
-  FalconIOCQueryParams
+  FalconIOCQueryParams,
+  IOCsThreatActorQueryParams
 } from "../../types/index.js";
 
 export interface IIOCService {
@@ -12,6 +13,7 @@ export interface IIOCService {
   getIOCsByThreatType(threatType: string): Promise<IOCResponse>;
   getIOCsPage(params: IOCQueryParams): Promise<IOCResponse>;
   getIOCsByFilters(params:FalconIOCQueryParams):Promise<FalconIOCResponse>;
+  getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse>;
 }
 
 export class IOCService implements IIOCService {
@@ -35,5 +37,9 @@ export class IOCService implements IIOCService {
 
   async getIOCsByFilters(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
     return this.apiClient.getIOC(params);
+  }
+
+  async getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse> {
+    return this.apiClient.getIOCsThreatActors(params);
   }
 }

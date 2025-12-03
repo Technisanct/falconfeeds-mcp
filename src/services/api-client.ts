@@ -10,7 +10,8 @@ import type {
   IOCQueryParams,
   ThreatImageResponse,
   FalconIOCResponse,
-  FalconIOCQueryParams
+  FalconIOCQueryParams,
+  IOCsThreatActorQueryParams
 } from "../types/index.js";
 import { isValidCountry, isValidIndustry, getIndustryValidationMessage } from "../utils/validation.js";
 
@@ -44,6 +45,7 @@ export interface IApiClient {
   getIOCs(params?: IOCQueryParams): Promise<IOCResponse>;
   getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
   getIOC(params?: FalconIOCQueryParams): Promise<FalconIOCResponse>;
+  getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse>;
 }
 
 export class FalconFeedsApiClient implements IApiClient {
@@ -151,6 +153,11 @@ export class FalconFeedsApiClient implements IApiClient {
     return this.makeRequest<FalconIOCResponse>(API_CONFIG.ENDPOINTS.IOCV2, params);
   }
 
+  async getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse> {
+    this.validateFalconIOCParams(params);
+    return this.makeRequest<FalconIOCResponse>(API_CONFIG.ENDPOINTS.IOC_THREAT_ACTOR, params);
+  }
+
   async getThreatImage(imageUuid: string): Promise<ThreatImageResponse> {
     if (!imageUuid) {
       throw new FalconFeedsApiError(
@@ -245,6 +252,7 @@ export class FalconFeedsApiClient implements IApiClient {
     if (!params) return;
 
     if (params.next !== undefined && params.next === "") {
+
       throw new FalconFeedsApiError(
         "The 'next' token cannot be an empty string.",
         400,
