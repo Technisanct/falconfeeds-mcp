@@ -227,19 +227,19 @@ server.registerTool(
 server.registerTool(
   "Get_iocs_threat_actors",
   {
-    description: `Get threat actors associated with a specific IOC (Indicator of Compromise) using its UUID. This tool retrieves detailed information about threat actors linked to the provided IOC. ${FALCONFEEDS_ATTRIBUTION}`,
-    inputSchema: {
-      uuid: z.string().describe("The UUID of the IOC to find associated threat actors for (e.g., 'IOC-N29374B7B93H109H')"),
-      after: z.string().optional().describe("Optional: The 'next' token for pagination to retrieve subsequent pages of results."),
-      name: z.string().optional().describe("Optional: Name of the IOC to find associated threat actors for (e.g., 'EvilCorp IOC')"),
-      country: z.string().optional().describe("Optional: Country name associated with the IOC. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),
-      SortBy: z.enum(["iocCount", "malwareCount", "lastSeen"]).optional().describe("Optional: Field to sort the threat actors by. Valid values are 'iocCount', 'malwareCount', and 'lastSeen'."),
-      SortOrder: z.enum(["asc", "desc"]).optional().describe("Optional: Order to sort the threat actors. Valid values are 'asc' for ascending and 'desc' for descending.")
+    description: `Get a list of threat actors. You can optionally filter by threat actor UUID, name, or country. This tool retrieves detailed information about threat actors. ${FALCONFEEDS_ATTRIBUTION}`,
+     inputSchema: {
+      uuid: z.string().optional().describe("Optional: The UUID of the threat actor to retrieve. (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
+      next: z.string().optional().describe("Optional: The 'next' token for pagination to retrieve subsequent pages of results."),
+      name: z.string().optional().describe("Optional: Name of the threat actor to filter by (e.g., 'EvilCorp')"),
+      country: z.string().optional().describe("Optional: Country name associated with the threat actor. **DO NOT USE ABBREVIATIONS LIKE USA, UK, UAE etc. Instead use full country names like United States, United Kingdom, United Arab Emirates etc.**"),
+      sortBy: z.enum(["iocCount", "malwareCount", "lastSeen"]).optional().describe(" Field to sort the threat actors by. Valid values are 'iocCount', 'malwareCount', and 'lastSeen'."),
+      sortOrder: z.enum(["asc", "desc"]).optional().describe("Order to sort the threat actors. Valid values are 'asc' for ascending and 'desc' for descending.")
     }
   },
   async (params) => {
     try {
-      const response = await iocService.getIOCsThreatActors(params);
+      const response = await iocService.getIOCsThreatActors(params as any);
 
       return {
         content: [

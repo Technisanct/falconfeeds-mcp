@@ -39,7 +39,7 @@ export class IOCService implements IIOCService {
     return this.apiClient.getIOC(params);
   }
 
-  async getIOCsThreatActors(params: FalconIOCQueryParams): Promise<FalconIOCResponse> {
+  async getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse> {
     return this.apiClient.getIOCsThreatActors(params);
   }
 }

@@ -45,7 +45,7 @@ export interface IApiClient {
   getIOCs(params?: IOCQueryParams): Promise<IOCResponse>;
   getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
   getIOC(params?: FalconIOCQueryParams): Promise<FalconIOCResponse>;
-  getIOCsThreatActors(params: FalconIOCQueryParams): Promise<FalconIOCResponse>;
+  getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse>;
 }
 
 export class FalconFeedsApiClient implements IApiClient {
@@ -155,7 +155,7 @@ export class FalconFeedsApiClient implements IApiClient {
 
   async getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse> {
     this.validateFalconIOCParams(params);
-    return this.makeRequest<FalconIOCResponse>(API_CONFIG.ENDPOINTS.IOC, params);
+    return this.makeRequest<FalconIOCResponse>(API_CONFIG.ENDPOINTS.IOC_THREAT_ACTOR, params);
   }
 
   async getThreatImage(imageUuid: string): Promise<ThreatImageResponse> {

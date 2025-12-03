@@ -44,8 +44,8 @@ export interface FalconIOCQueryParams {
 }
 
 export interface IOCsThreatActorQueryParams {
-  uuid: string;
-  after?: string;
+  uuid?: string;
+  next?: string;
   name?: string;
   country?: string;
   SortBy?: string;

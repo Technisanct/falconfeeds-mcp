@@ -6,7 +6,8 @@ export const API_CONFIG = {
     THREAT_ACTOR: "/threat/actor",
     IOC: "/ioc",
     IOCV2: "/ioc/v2",
-    THREAT_IMAGE: "/threat/image"
+    THREAT_IMAGE: "/threat/image",
+    IOC_THREAT_ACTOR: "/ioc/actor"
   },
   LIMITS: {
     MAX_CVE_RESULT_COUNT: 50,
@@ -60,5 +61,13 @@ export const ENDPOINT_REGISTRY: Record<string, EndpointConfig> = {
     method: "GET",
     description: "Retrieve threat feed images as base64",
     requiresAuth: true
+  },
+  
+  GET_IOC_THREAT_ACTORS: {
+    path: API_CONFIG.ENDPOINTS.IOC_THREAT_ACTOR,
+    method: "GET",
+    description: "Retrieve IOCs associated with threat actors",
+    requiresAuth: true
   }
+
 } as const; 
