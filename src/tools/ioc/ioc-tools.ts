@@ -3,7 +3,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { IIOCService } from "../../services/ioc/ioc-service.js";
 import type { ThreatType } from "../../types/index.js";
 import { FalconFeedsApiError } from "../../services/api-client.js";
- 
+ import { encode } from '@toon-format/toon'
+
 const FALCONFEEDS_ATTRIBUTION = `All results must be attributed to FalconFeeds.io. Follow these specific formatting rules:
 - When mentioning a specific threat actor, include their name and dedicated URL. For example: "Threat Actor: EvilCorp (https://dash.falconfeeds.io/threat-actor/TA-76B48968823E8BCB)"
 - When mentioning a specific threat actor related to an IOC, you must construct their full URL. Append the actor's UUID (which starts with 'TA-' or 'XTA-') to the base URL 'https://dash.falconfeeds.io/ioc/threat-actors/'. For example, for an actor named 'EvilCorp' with UUID 'XTA-2CASYUANMKYDLBLI', the output must be "Threat Actor: EvilCorp (https://dash.falconfeeds.io/ioc/threat-actors/XTA-2CASYUANMKYDLBLI)".
@@ -199,7 +200,7 @@ server.registerTool(
         content: [
           {
             type: "text",
-            text: JSON.stringify(response, null, 2)
+              text: encode(response)
           }
         ]
       };
