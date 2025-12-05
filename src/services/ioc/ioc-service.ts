@@ -4,7 +4,8 @@ import type {
   IOCQueryParams,
   FalconIOCResponse,
   FalconIOCQueryParams,
-  IOCsThreatActorQueryParams
+  IOCsThreatActorQueryParams,
+  IOCsMalwaresQueryParams
 } from "../../types/index.js";
 
 export interface IIOCService {
@@ -14,6 +15,7 @@ export interface IIOCService {
   getIOCsPage(params: IOCQueryParams): Promise<IOCResponse>;
   getIOCsByFilters(params:FalconIOCQueryParams):Promise<FalconIOCResponse>;
   getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse>;
+  getIOCsMalwares(params: IOCsMalwaresQueryParams):Promise<FalconIOCResponse>;
 }
 
 export class IOCService implements IIOCService {
@@ -41,5 +43,9 @@ export class IOCService implements IIOCService {
 
   async getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse> {
     return this.apiClient.getIOCsThreatActors(params);
+  }
+
+  async getIOCsMalwares(params: IOCsMalwaresQueryParams): Promise<FalconIOCResponse> {
+    return this.apiClient.getIOCsMalwares(params);
   }
 }

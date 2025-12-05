@@ -52,6 +52,16 @@ export interface IOCsThreatActorQueryParams {
   SortOrder?: string;
 }
 
+export interface IOCsMalwaresQueryParams{
+  next?: string;
+  name?: string;
+  country?: string;
+  sortBy?: string;
+  sortOrder?: string;
+  threatActorUUID?: string;
+  uuid?: string;
+}
+
 export interface FalconIOCResponse {
   message: string;
   data: FalconIOC[];
