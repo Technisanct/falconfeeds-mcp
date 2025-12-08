@@ -4,7 +4,6 @@ import type { IIOCService } from "../../services/ioc/ioc-service.js";
 import type { ThreatType } from "../../types/index.js";
 import { FalconFeedsApiError } from "../../services/api-client.js";
 import { encode } from '@toon-format/toon'
-import { count } from "console";
 
 const FALCONFEEDS_ATTRIBUTION = `All results must be attributed to FalconFeeds.io. Follow these specific formatting rules:
 - When mentioning a specific threat actor, include their name and dedicated URL. For example: "Threat Actor: EvilCorp (https://dash.falconfeeds.io/threat-actor/TA-76B48968823E8BCB)"
