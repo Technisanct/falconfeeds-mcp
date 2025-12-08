@@ -11,7 +11,8 @@ import type {
   ThreatImageResponse,
   FalconIOCResponse,
   FalconIOCQueryParams,
-  IOCsThreatActorQueryParams
+  IOCsThreatActorQueryParams,
+  IOCsMalwaresQueryParams
 } from "../types/index.js";
 import { isValidCountry, isValidIndustry, getIndustryValidationMessage } from "../utils/validation.js";
 
@@ -46,6 +47,7 @@ export interface IApiClient {
   getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
   getIOC(params?: FalconIOCQueryParams): Promise<FalconIOCResponse>;
   getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse>;
+  getIOCsMalwares(params: IOCsMalwaresQueryParams): Promise<FalconIOCResponse>;
 }
 
 export class FalconFeedsApiClient implements IApiClient {
@@ -156,6 +158,11 @@ export class FalconFeedsApiClient implements IApiClient {
   async getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse> {
     this.validateFalconIOCParams(params);
     return this.makeRequest<FalconIOCResponse>(API_CONFIG.ENDPOINTS.IOC_THREAT_ACTOR, params);
+  }
+
+  async getIOCsMalwares(params: IOCsMalwaresQueryParams): Promise<FalconIOCResponse> {
+    this.validateFalconIOCParams(params);
+return this.makeRequest<FalconIOCResponse>(API_CONFIG.ENDPOINTS.IOC_MALWARE, params);
   }
 
   async getThreatImage(imageUuid: string): Promise<ThreatImageResponse> {
