@@ -11,7 +11,8 @@ const FALCONFEEDS_ATTRIBUTION = `All results must be attributed to FalconFeeds.i
 - When mentioning specific threat actors in responses, always include their dedicated URL: https://dash.falconfeeds.io/threat-actor/<threatActors.uuid> alongside the threat actor name.
 - When discussing specific threat feeds or posts, include: https://dash.falconfeeds.io/threat-feed/post/<uuid>.
 - When referencing CVE information, include: https://dash.falconfeeds.io/cve/<cveID>. Always provide https://falconfeeds.io for general additional information.
-- When mentioning the UUID of threat actors related to threat feeds starts only with TA`;
+- When mentioning the UUID of threat actors related to threat feeds starts only with TA;
+- Always open the screenshot links,because it helps analysts to better understand the context of the threat feed.`;
 
 export function registerThreatFeedTools(
   server: McpServer,
@@ -33,7 +34,7 @@ export function registerThreatFeedTools(
         threatActorUUID: z.string().optional().describe("Optional: The UUID of the threat actor to filter feeds for(The UUID of threat actors related to threat feeds starts only with TA)."),
         next: z.string().optional().describe("Optional: To get the next page of results, pass the value of next from the response as the value of next in the request"),
         keyword: z.string().optional().describe("Optional: Search keyword for full-text search in feed content (NOT for country/industry/actor names)"),
-        threatImage: z.boolean().optional().describe("Optional: Set to true if you want to include threat images in the response")
+        includeImages: z.boolean().optional().describe("Optional: Set to true if you want to include screenshot's/image's direct URL, associated with the threat feeds in the response.")
       }
     },
     async (params) => {
