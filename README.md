@@ -103,15 +103,7 @@ Configure your MCP client:
 - **`get_next_cve_page`**: Paginate through large CVE result sets
 
 ### Threat Feed Operations  
-- **`get_threat_feed_by_id`**: Get specific threat feed by UUID
-- **`get_threat_feeds_by_actor`**: Find feeds associated with threat actors
-- **`get_threat_feeds_by_category`**: Filter feeds by threat categories
-- **`search_threat_feeds_by_keyword`**: Search feeds using keywords
-- **`get_threat_feeds_by_organization`**: Get feeds targeting specific organizations
-- **`get_threat_feeds_by_domain`**: Get feeds targeting specific websites or domains
-- **`get_threat_feeds_by_country`**: Get feeds targeting victims from specific countries
-- **`get_threat_feeds_by_industry`**: Get feeds targeting specific industry sectors
-- **`get_next_threat_feed_page`**: Navigate through paginated results
+- **`get_threat_feeds`**: Retrieve threat feed reports based on filters
 
 ### Threat Actor Operations
 - **`get_threat_actor_profile`**: Get comprehensive threat actor profile with associated feeds
@@ -121,10 +113,6 @@ Configure your MCP client:
 - **`get_next_threat_actor_page`**: Paginate actor search results
 
 ### IOC Operations
-- **`search_iocs`**: Search and analyze Indicators of Compromise
-- **`get_iocs_by_country`**: Get IOCs filtered by specific countries
-- **`get_iocs_by_threat_type`**: Filter IOCs by threat types (botnet_cc, malware_download, etc.)
-- **`get_iocs_page`**: Get specific pages of IOC results for pagination
 - **`get_IOCs`**: Retrieve all detailed IOCs 
 - **`get_IOCsThreatActors`**: Retrieve threat actors associated with specific IOCs
 - **`get_IOCsMalwares`**: Retrieve malware information linked to specific IOCs

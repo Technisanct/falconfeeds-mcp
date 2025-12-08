@@ -43,7 +43,6 @@ export interface IApiClient {
   getCVEs(params: CVEQueryParams): Promise<CVEResponse>;
   getThreatFeeds(params?: ThreatFeedQueryParams): Promise<ThreatFeedResponse>;
   getThreatActors(params?: ThreatActorQueryParams): Promise<ThreatActorResponse>;
-  getIOCs(params?: IOCQueryParams): Promise<IOCResponse>;
   getThreatImage(imageUuid: string): Promise<ThreatImageResponse>;
   getIOC(params?: FalconIOCQueryParams): Promise<FalconIOCResponse>;
   getIOCsThreatActors(params: IOCsThreatActorQueryParams): Promise<FalconIOCResponse>;
@@ -143,11 +142,6 @@ export class FalconFeedsApiClient implements IApiClient {
 
   async getThreatActors(params?: ThreatActorQueryParams): Promise<ThreatActorResponse> {
     return this.makeRequest<ThreatActorResponse>(API_CONFIG.ENDPOINTS.THREAT_ACTOR, params);
-  }
-
-  async getIOCs(params?: IOCQueryParams): Promise<IOCResponse> {
-    this.validateIOCParams(params);
-    return this.makeRequest<IOCResponse>(API_CONFIG.ENDPOINTS.IOC, params);
   }
 
   async getIOC(params?: FalconIOCQueryParams): Promise<FalconIOCResponse> {
