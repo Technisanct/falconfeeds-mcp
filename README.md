@@ -125,8 +125,9 @@ Configure your MCP client:
 - **`get_iocs_by_country`**: Get IOCs filtered by specific countries
 - **`get_iocs_by_threat_type`**: Filter IOCs by threat types (botnet_cc, malware_download, etc.)
 - **`get_iocs_page`**: Get specific pages of IOC results for pagination
-- ** `get_IOCs`mb
-
+- **`get_IOCs`**: Retrieve all detailed IOCs 
+- **`get_IOCsThreatActors`**: Retrieve threat actors associated with specific IOCs
+- **`get_IOCsMalwares`**: Retrieve malware information linked to specific IOCs
 
 ### Threat Image Operations
 - **`get_threat_image`**: Retrieve and display visual evidence from threat feed reports including screenshots, ransom notes, and leaked data samples

@@ -270,13 +270,12 @@ server.registerTool(
 server.registerTool(
   "Get_IOC_malwares",
   {
-description:`Get a list of malwares.You can optionally filter by threat actor uuid,name,or country. This tool retrieves detailed information about malwares. ${FALCONFEEDS_ATTRIBUTION}`,
+    description:`Get a list of malwares.You can optionally filter by threat actor uuid,name,or country. This tool retrieves detailed information about malwares. ${FALCONFEEDS_ATTRIBUTION}`,
     inputSchema: {
       next:z.string().optional().describe("The 'next' token for pagination to retrieve subsequent pages of results."),
       name:z.string().optional().describe("Name of the malware to filter by (e.g., 'CryptoWorm')"),
-      country:z.string().optional().describe("Country associated with the malware."),
-      sortBy:z.enum(["iocCount", "threatActorCount", "lastSeen"]).optional().describe("Field to sort the malwares by. Valid values are 'iocCount', 'threatActorCount', and 'lastSeen'."),
-      sortOrder:z.enum(["asc", "desc"]).optional().describe("Order to sort the malwares.Valid values are 'asc' for ascending and 'desc' for descending."),
+      sortBy:z.enum(["iocCount", "threatActorCount", "lastSeen"]).default("lastSeen").describe("Field to sort the malwares by. Valid values are 'iocCount', 'threatActorCount', and 'lastSeen'."),
+      sortOrder:z.enum(["asc", "desc"]).default("desc").describe("Order to sort the malwares.Valid values are 'asc' for ascending and 'desc' for descending."),
       threatActorUUID:z.string().optional().describe("The UUID of the threat actor to filter by. (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
       uuid:z.string().optional().describe("The UUID of the malware to retrieve. (e.g., 'MAL-Z70YOEPG7OP80T7Q')")   
     }

@@ -55,7 +55,6 @@ export interface IOCsThreatActorQueryParams {
 export interface IOCsMalwaresQueryParams{
   next?: string;
   name?: string;
-  country?: string;
   sortBy?: string;
   sortOrder?: string;
   threatActorUUID?: string;
