@@ -103,7 +103,7 @@ Configure your MCP client:
 - **`get_next_cve_page`**: Paginate through large CVE result sets
 
 ### Threat Feed Operations  
-- **`get_threat_feeds`**: Retrieve threat feed reports based on filters
+- **`get_threat_feeds`**: Retrieve threat feeds based on filters
 
 ### Threat Actor Operations
 - **`get_threat_actor_profile`**: Get comprehensive threat actor profile with associated feeds
