@@ -269,7 +269,7 @@ server.registerTool(
 server.registerTool(
   "Get_IOC_malwares",
   {
-    description:`Get a list of malwares.You can optionally filter by threat actor uuid,name,or threatActorUUID. This tool retrieves detailed information about malwares. ${FALCONFEEDS_ATTRIBUTION}`,
+    description:`Get a list of malwares. You can optionally filter by malware name, malware UUID, or threat actor UUID. This tool retrieves detailed information about malwares. To get the full count of malwares, paginate until no results are found. ${FALCONFEEDS_ATTRIBUTION}`,
     inputSchema: {
       next:z.string().optional().describe("The 'next' token for pagination to retrieve subsequent pages of results."),
       name:z.string().optional().describe("Name of the malware to filter by (e.g., 'CryptoWorm')"),
