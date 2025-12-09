@@ -53,7 +53,7 @@ export function registerThreatActorTools(
         // Step 2: If requested, get threat feeds attributed to this actor
         if (includeFeeds) {
           try {
-            const feedsResponse = await threatFeedService.getThreatFeedsByActor(threatActor.uuid);
+            const feedsResponse = await threatFeedService.getThreatFeeds({ threatActorUUID: threatActor.uuid });
             result.attributedFeeds = {
               count: feedsResponse.data?.length || 0,
               feeds: feedsResponse.data || [],

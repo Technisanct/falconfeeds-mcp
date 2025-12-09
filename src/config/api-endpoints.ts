@@ -4,7 +4,6 @@ export const API_CONFIG = {
     CVE: "/cve",
     THREAT_FEED: "/threat/feed",
     THREAT_ACTOR: "/threat/actor",
-    IOC: "/ioc",
     IOCV2: "/ioc/v2",
     THREAT_IMAGE: "/threat/image",
     IOC_THREAT_ACTOR: "/ioc/actor",
@@ -40,13 +39,6 @@ export const ENDPOINT_REGISTRY: Record<string, EndpointConfig> = {
     path: API_CONFIG.ENDPOINTS.THREAT_ACTOR,
     method: "GET",
     description: "Retrieve threat actor information",
-    requiresAuth: true
-  },
-
-  GET_IOCS: {
-    path: API_CONFIG.ENDPOINTS.IOC,
-    method: "GET",
-    description: "Retrieve Indicators of Compromise (IOCs)",
     requiresAuth: true
   },
 
