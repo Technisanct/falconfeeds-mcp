@@ -1,0 +1,116 @@
+{
+  "manifest_version": "0.2",
+  "name": "FalconFeeds.io",
+  "version": "2.0.0",
+  "description": "Official MCP server for FalconFeeds.io threat intelligence data",
+  "long_description": "Connect real-time cybersecurity threat intelligence to MCP clients through standardized tools and resources. Access comprehensive IOCs, CVEs, TTPs, and threat actor data from [FalconFeeds.io](https://falconfeeds.io) with seamless integration across Claude Desktop, VS Code, and other MCP-enabled applications",
+  "author": {
+    "name": "FalconFeeds.io",
+    "email": "support@falconfeeds.io",
+    "url": "https://falconfeeds.io"
+  },
+  "homepage": "https://falconfeeds.io",
+  "documentation": "https://dash.falconfeeds.io/mcp/docs",
+  "support": "https://falconfeeds.io/contact",
+  "icon": "logo.png",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {
+        "FALCONFEEDS_API_KEY": "${user_config.FALCONFEEDS_API_KEY}"
+
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "Get_threat_feeds",
+      "description": "Get a list of threat feeds. You can optionally filter by threat feed UUID, category, or victim information."
+    },
+    {
+      "name": "Get_IOCs",
+      "description": "Get all IOCs (Indicators of Compromise) using a flexible set of optional filters."
+    },
+    {
+      "name": "Get_IOC_threat_actors",
+      "description": "Get a list of threat actors. You can optionally filter by threat actor UUID, name, or country"
+    },
+    {
+      "name": "Get_IOC_malwares",
+      "description": "Get a list of malwares. You can optionally filter by malware name, malware UUID, or threat actor UUID."
+    },
+    {
+      "name": "get_threat_actor_profile",
+      "description": "Get a comprehensive threat actor profile including attributed threat feeds."
+    },
+    {
+      "name": "search_threat_actors",
+      "description": "Search threat actors with optional filters. "
+    },
+    {
+      "name": "get_threat_actor_by_id",
+      "description": "Get a specific threat actor by UUID."
+    },
+    {
+      "name": "search_threat_actors_by_name",
+      "description": "Search threat actors by name prefix."
+    },
+    {
+      "name": "get_next_threat_actor_page",
+      "description": "Get the next page of threat actor results."
+    },
+    {
+      "name":"get_cves_by_date_range",
+      "description":"Get CVEs (Common Vulnerabilities and Exposures) within a specified date range."
+    },
+    {
+      "name":"get_next_cve_page",
+      "description":"Get the next page of CVE results."
+    },
+    {
+      "name":"search_cves_by_keyword",
+      "description":"Get CVEs by searching with a keyword."
+    },
+    {
+      "name":"get_cve_by_id",
+      "description":"Get a specific CVE by its identifier."
+    }
+  ],
+  "compatibility": {
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  },
+  "user_config": {
+    "FALCONFEEDS_API_KEY": {
+      "type": "string",
+      "title": "FalconFeeds.io API Key",
+      "description": "Your FalconFeeds.io API key for accessing threat intelligence data.",
+      "required": true,
+      "sensitive": true
+    }
+  },
+  "keywords": [
+    "IOC",
+    "threat actor",
+    "malware",
+    "cybersecurity",
+    "Indicators of Compromise",
+    "Falconfeeds",
+    "threat analysis",
+    "cybersecurity intelligence",
+    "malware analysis",
+    "threat feed",
+    "CVE"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Technisanct/falconfeeds-mcp.git"
+  }
+}
