@@ -22,6 +22,11 @@ server.registerTool(
   "Get_IOCs",
   {
     description: `Get all IOCs (Indicators of Compromise) using a flexible set of optional filters. This tool allows you to filtered by malware using malwareUUID, threat actor using threatActorUUID, type, confidence and keyword. Pagination is required for every request, and the page parameter must always be included when retrieving results or fetching additional pages.Use the 'next' parameter for pagination Refer to the input schema for valid values. ${FALCONFEEDS_ATTRIBUTION}`,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      title: "Get IOCs (Indicators of Compromise)"
+    },
     inputSchema: {
       type: z.enum(["ipv4", "ipv6", "ip:port", "domain", "url", "md5", "sha1", "sha256","sha3"]).optional().describe("Optional: A list of IOC types to retrieve (e.g., ['ipv4', 'url'])"),
       malwareUUID:  z.string().optional().describe("The UUID of the malware to find associated IOCs for (e.g., 'MAL-Z70YOEPG7OP80T7Q')"),
@@ -67,6 +72,11 @@ server.registerTool(
   "Get_IOC_threat_actors",
   {
     description: `Get a list of threat actors. You can optionally filter by threat actor UUID, name, or country. This tool retrieves detailed information about threat actors. ${FALCONFEEDS_ATTRIBUTION}`,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      title: "Get IOCs(Indicator of Compromise) Threat Actors"
+    },
      inputSchema: {
       uuid: z.string().optional().describe("Optional: The UUID of the threat actor to retrieve. (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
       next: z.string().optional().describe("Optional: The 'next' token for pagination to retrieve subsequent pages of results."),
@@ -109,6 +119,11 @@ server.registerTool(
   "Get_IOC_malwares",
   {
     description:`Get a list of malwares. You can optionally filter by malware name, malware UUID, or threat actor UUID. This tool retrieves detailed information about malwares. To get the full count of malwares with given filters, paginate until no results are found. ${FALCONFEEDS_ATTRIBUTION}`,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      title: "Get IOCs(Indicator of Compromise) Malwares"
+    },
     inputSchema: {
       next:z.string().optional().describe("The 'next' token for pagination to retrieve subsequent pages of results."),
       name:z.string().optional().describe("Name of the malware to filter by (e.g., 'CryptoWorm')"),

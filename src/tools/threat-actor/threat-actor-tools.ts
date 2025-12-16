@@ -20,6 +20,11 @@ export function registerThreatActorTools(
     "get_threat_actor_profile",
     {
       description: `Get comprehensive threat actor profile including attributed threat feeds. Use this tool when you have a threat actor NAME (like 'LockBit', 'LEAKBASE', 'APT29') and want to find their profile and associated threat feeds. This automatically searches for the actor by name first, then retrieves their feeds. To get the next page of threat feeds, call 'get_next_threat_feed_page' with the next token and the same threatActorUUID. ${FALCONFEEDS_ATTRIBUTION}`,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        title: "Get Threat Actor Profile"
+      },
       inputSchema: {
         actorName: z.string().describe("Name of the threat actor (e.g., 'LockBit', 'APT29', 'Lazarus Group', 'LEAKBASE')"),
         includeFeeds: z.boolean().optional().default(true).describe("Whether to include associated threat feeds (default: true)")
@@ -97,6 +102,11 @@ export function registerThreatActorTools(
     "search_threat_actors",
     {
       description: `Search threat actors with optional filters. To get the next page of results, call 'get_next_threat_actor_page' with the next token and the same name parameter (if used in the original search). ${FALCONFEEDS_ATTRIBUTION}`,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        title: "Search Threat Actors"
+      },
       inputSchema: {
         next: z.string().optional().describe("Pagination token for next page"),
         uuid: z.string().optional().describe("Get specific threat actor by UUID"),
@@ -146,6 +156,11 @@ export function registerThreatActorTools(
     "get_threat_actor_by_id",
     {
       description: `Get a specific threat actor by UUID. ${FALCONFEEDS_ATTRIBUTION}`,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        title: "Get Threat Actor by UUID"
+      },
       inputSchema: {
         uuid: z.string().describe("Threat actor UUID")
       }
@@ -183,6 +198,11 @@ export function registerThreatActorTools(
     "search_threat_actors_by_name",
     {
       description: `Search threat actors by name prefix. To get the next page of results, call 'get_next_threat_actor_page' with the next token and the same name parameter. ${FALCONFEEDS_ATTRIBUTION}`,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        title: "Search Threat Actors by Name"
+      },
       inputSchema: {
         name: z.string().describe("Threat actor name prefix to search for")
       }
@@ -220,6 +240,11 @@ export function registerThreatActorTools(
     "get_next_threat_actor_page",
     {
       description: `Get the next page of threat actor results. To get the next page for a previous query, call this tool with the next token and the same filtering parameters (name) as the original query. ${FALCONFEEDS_ATTRIBUTION}`,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        title: "Get Next Threat Actor Page"
+      },
       inputSchema: {
         nextToken: z.string().describe("Pagination token from previous response"),
         name: z.string().optional().describe("Optional: Threat actor name prefix to search for")
