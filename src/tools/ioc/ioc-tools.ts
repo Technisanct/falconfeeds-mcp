@@ -75,7 +75,7 @@ server.registerTool(
     annotations: {
       readOnlyHint: true,
       destructiveHint: false,
-      title: "Get IOC(Indicator of Compromise) Threat Actors"
+      title: "Get IOCs(Indicator of Compromise) Threat Actors"
     },
      inputSchema: {
       uuid: z.string().optional().describe("Optional: The UUID of the threat actor to retrieve. (e.g., 'XTA-ALHBXKLRWMTB54VB')"),
@@ -122,7 +122,7 @@ server.registerTool(
     annotations: {
       readOnlyHint: true,
       destructiveHint: false,
-      title: "Get IOC(Indicator of Compromise) Malwares"
+      title: "Get IOCs(Indicator of Compromise) Malwares"
     },
     inputSchema: {
       next:z.string().optional().describe("The 'next' token for pagination to retrieve subsequent pages of results."),
