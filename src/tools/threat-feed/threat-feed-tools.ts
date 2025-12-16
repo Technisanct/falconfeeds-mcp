@@ -24,6 +24,11 @@ export function registerThreatFeedTools(
     "Get_threat_feeds",
     {
       description: `Get a list of threat feeds. You can optionally filter by threat feed UUID, category, or victim information. This tool retrieves detailed information about threat feeds. ${FALCONFEEDS_ATTRIBUTION}`,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        title: "Get Threat Feeds"
+      },
       inputSchema: {
         uuid: z.string().optional().describe("Optional: The UUID of the threat feed to retrieve."),
         category: z.enum(["Ransomware", "Data Breach", "Data Leak", "Malware", "DDoS Attack", "Phishing", "Combo List", "Logs", "Defacement", "Alert", "Vulnerability"]).optional().describe("Optional: The category of the threat feed to filter by."),
